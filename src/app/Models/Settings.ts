@@ -7,7 +7,7 @@ export class Settings {
     public brightness: number;
     public contrast: number;
 
-set(brightness, contrast){
+    set(brightness, contrast) {
 
-}
+    }
 }

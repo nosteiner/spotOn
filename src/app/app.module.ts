@@ -11,6 +11,7 @@ import { SpotComponent } from './Components/spot/spot.component';
 import { CanvasComponent } from './Components/canvas/canvas.component';
 import { SettingsComponent } from './Components/settings/settings.component';
 import { LensComponent } from './Components/lens/lens.component';
+import { GlassesComponent } from './Components/glasses/glasses.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { LensComponent } from './Components/lens/lens.component';
     CanvasComponent,
     SettingsComponent,
     LensComponent,
+    GlassesComponent,
 
   ],
   imports: [

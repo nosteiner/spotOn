@@ -1,6 +1,6 @@
 import { Settings } from './Settings';
 
-export class Video {
+export class Lens {
 
     public isRight: boolean;
     public settings: Settings;
@@ -10,7 +10,7 @@ export class Video {
         this.settings = new Settings();
     }
 
-set(brightness, contrast){
+    set(brightness, contrast) {
 
-}
+    }
 }

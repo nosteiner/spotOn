@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-lens',
@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class LensComponent implements OnInit {
 
   constructor() { }
+@Input() side: string;
+@Input() isActive: boolean;
 
   ngOnInit() {
   }

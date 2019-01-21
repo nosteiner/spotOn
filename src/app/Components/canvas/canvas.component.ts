@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { SpotsService } from 'src/app/Services/spots.service';
 import { Spot } from 'src/app/Models/Spot';
-import { Video } from 'src/app/Models/Video';
+import { Lens } from 'src/app/Models/Lens';
 
 @Component({
   selector: 'app-canvas',
@@ -16,16 +16,15 @@ export class CanvasComponent implements OnInit {
   // spots = [];
   ctx: CanvasRenderingContext2D;
   spot: Spot;
-  @Input() id: number;
+  @Input() id: string;
+  @Input() isActive: boolean;
+
   @ViewChild('canvas') canvas: ElementRef;
 
   ngOnInit() {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    const htmlCanvasElement = this.canvas.nativeElement as HTMLCanvasElement;
-    this.spot = new Spot(htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
-
-    this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
-    this.makeSpotMovable();
+    if (this.isActive) {
+      this.initCanvas();
+    }
   }
 
   drawSpot(x, y, width, height) {
@@ -65,5 +64,14 @@ export class CanvasComponent implements OnInit {
 
   mmToPixel(mm) {
     return 3.7795275591 * mm;
+  }
+
+  initCanvas() {
+    console.log(this.id);
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    const htmlCanvasElement = this.canvas.nativeElement as HTMLCanvasElement;
+    this.spot = new Spot(htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
+    this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
+    this.makeSpotMovable();
   }
 }

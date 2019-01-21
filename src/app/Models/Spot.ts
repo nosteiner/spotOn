@@ -1,4 +1,3 @@
-import { Identifiers } from '@angular/compiler';
 
 export class Spot {
     constructor(x, y) {

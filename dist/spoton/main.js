@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n    <canvas class=\"canvas\" id='{{id}}' #canvas  style=\"width: 16cm; height: 9cm;\">\n    <app-video></app-video>\n    </canvas>\n"
+module.exports = "<div id=\"container\">\n    <canvas class=\"canvas\" id='{{id}}' #canvas style=\"width: 16cm; height: 9cm;\">\n    </canvas>\n    <webcam class=\"video\"></webcam>\n</div>"
 
 /***/ }),
 
@@ -322,7 +322,7 @@ module.exports = "\n    <canvas class=\"canvas\" id='{{id}}' #canvas  style=\"wi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvY2FudmFzL2NhbnZhcy5jb21wb25lbnQuc2NzcyJ9 */"
+module.exports = "#container {\n  width: 100px;\n  height: 100px;\n  position: relative; }\n\n.video, .canvas {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.canvas {\n  z-index: 10; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9jYW52YXMvQzpcXFVzZXJzXFxub3N0ZVxcQ29kZVxcQW5ndWxhclxcc3BvdG9uL3NyY1xcYXBwXFxDb21wb25lbnRzXFxjYW52YXNcXGNhbnZhcy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNJLFlBQVk7RUFDWixhQUFhO0VBQ2Isa0JBQWtCLEVBQUE7O0FBRXBCO0VBQ0UsV0FBVztFQUNYLFlBQVk7RUFDWixrQkFBa0I7RUFDbEIsTUFBTTtFQUNOLE9BQU8sRUFBQTs7QUFFVDtFQUNFLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvY2FudmFzL2NhbnZhcy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIlxyXG4jY29udGFpbmVyIHtcclxuICAgIHdpZHRoOiAxMDBweDtcclxuICAgIGhlaWdodDogMTAwcHg7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgfVxyXG4gIC52aWRlbywgLmNhbnZhcyB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIHRvcDogMDtcclxuICAgIGxlZnQ6IDA7XHJcbiAgfVxyXG4gIC5jYW52YXMge1xyXG4gICAgei1pbmRleDogMTA7XHJcbiAgfSJdfQ== */"
 
 /***/ }),
 
@@ -350,11 +350,9 @@ var CanvasComponent = /** @class */ (function () {
         this.isRight = true;
     }
     CanvasComponent.prototype.ngOnInit = function () {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        var htmlCanvasElement = this.canvas.nativeElement;
-        this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
-        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
-        this.makeSpotMovable();
+        if (this.isActive) {
+            this.initCanvas();
+        }
     };
     CanvasComponent.prototype.drawSpot = function (x, y, width, height) {
         this.ctx.fillRect(x, y, width, height);
@@ -392,10 +390,22 @@ var CanvasComponent = /** @class */ (function () {
     CanvasComponent.prototype.mmToPixel = function (mm) {
         return 3.7795275591 * mm;
     };
+    CanvasComponent.prototype.initCanvas = function () {
+        console.log(this.id);
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        var htmlCanvasElement = this.canvas.nativeElement;
+        this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
+        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
+        this.makeSpotMovable();
+    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Number)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
     ], CanvasComponent.prototype, "id", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], CanvasComponent.prototype, "isActive", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('canvas'),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
@@ -415,6 +425,79 @@ var CanvasComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/Components/glasses/glasses.component.html":
+/*!***********************************************************!*\
+  !*** ./src/app/Components/glasses/glasses.component.html ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n    <div class=\"col-6\">\n        <app-lens [side]='L' [isActive]='isActiveL'></app-lens>\n    </div>\n    <div class=\"col-6\">\n        <app-lens [side]='R' [isActive]='isActiveR'></app-lens>\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/Components/glasses/glasses.component.scss":
+/*!***********************************************************!*\
+  !*** ./src/app/Components/glasses/glasses.component.scss ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvZ2xhc3Nlcy9nbGFzc2VzLmNvbXBvbmVudC5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/Components/glasses/glasses.component.ts":
+/*!*********************************************************!*\
+  !*** ./src/app/Components/glasses/glasses.component.ts ***!
+  \*********************************************************/
+/*! exports provided: GlassesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GlassesComponent", function() { return GlassesComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var GlassesComponent = /** @class */ (function () {
+    function GlassesComponent() {
+        this.L = 'L';
+        this.R = 'R';
+        this.isActiveL = false;
+        this.isActiveR = true;
+    }
+    GlassesComponent.prototype.ngOnInit = function () {
+    };
+    GlassesComponent.prototype.handleKeyboardEvent = function (event) {
+        var keyPr = event.keyCode;
+        if (keyPr === 32) {
+            this.isActiveL = !this.isActiveL;
+            this.isActiveR = !this.isActiveR;
+        }
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostListener"])('document:keypress', ['$event']),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Function),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [KeyboardEvent]),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:returntype", void 0)
+    ], GlassesComponent.prototype, "handleKeyboardEvent", null);
+    GlassesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-glasses',
+            template: __webpack_require__(/*! ./glasses.component.html */ "./src/app/Components/glasses/glasses.component.html"),
+            styles: [__webpack_require__(/*! ./glasses.component.scss */ "./src/app/Components/glasses/glasses.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GlassesComponent);
+    return GlassesComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/Components/lens/lens.component.html":
 /*!*****************************************************!*\
   !*** ./src/app/Components/lens/lens.component.html ***!
@@ -422,7 +505,7 @@ var CanvasComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n"
+module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n"
 
 /***/ }),
 
@@ -456,6 +539,14 @@ var LensComponent = /** @class */ (function () {
     }
     LensComponent.prototype.ngOnInit = function () {
     };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], LensComponent.prototype, "side", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], LensComponent.prototype, "isActive", void 0);
     LensComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-lens',
@@ -767,7 +858,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n<app-canvas [id]=1>   \n</app-canvas>\n<app-canvas [id]=2>   \n</app-canvas>\n\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n\n<app-glasses></app-glasses>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -836,6 +927,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/canvas/canvas.component */ "./src/app/Components/canvas/canvas.component.ts");
 /* harmony import */ var _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/settings/settings.component */ "./src/app/Components/settings/settings.component.ts");
 /* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
+/* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
+
 
 
 
@@ -860,6 +953,7 @@ var AppModule = /** @class */ (function () {
                 _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_9__["CanvasComponent"],
                 _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__["SettingsComponent"],
                 _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__["LensComponent"],
+                _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__["GlassesComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
