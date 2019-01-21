@@ -1,0 +1,21 @@
+// .canvas {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     z-index: 10;
+//     background-color:rgba(255,0,0,0.5);
+// }
+
+
+#video_box{
+    float:left;
+}
+.canvas {
+    position:absolute;
+    float:left;
+    width:640px;
+    min-height:370px;
+ background-color:rgba(223, 223, 223, 0.5);
+
+    z-index:1;
+}

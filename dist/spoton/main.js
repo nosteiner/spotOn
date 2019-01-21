@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<label class=\"image-upload-container btn btn-bwm\">\n  <span>Select Image</span>\n  <input #imageInput\n         type=\"file\"\n         accept=\"image/*\"\n         (change)=\"processFile(imageInput)\">\n</label>"
+module.exports = "\n<div id=\"wrap_video\">\n\n  <div id=\"video_box\">\n    <canvas class=\"canvas\" id=\"canvas\"></canvas>\n    <!-- <div>\n        <webcam></webcam>\n      </div> -->\n  </div>\n      \n  </div>"
 
 /***/ }),
 
@@ -322,7 +322,7 @@ module.exports = "<label class=\"image-upload-container btn btn-bwm\">\n  <span>
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvdXBsb2FkLWltZy91cGxvYWQtaW1nLmNvbXBvbmVudC5zY3NzIn0= */"
+module.exports = "#video_box {\n  float: left; }\n\n.canvas {\n  position: absolute;\n  float: left;\n  width: 640px;\n  min-height: 370px;\n  background-color: rgba(223, 223, 223, 0.5);\n  z-index: 1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy91cGxvYWQtaW1nL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcdXBsb2FkLWltZ1xcdXBsb2FkLWltZy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFTQTtFQUNJLFdBQVUsRUFBQTs7QUFFZDtFQUNJLGtCQUFpQjtFQUNqQixXQUFVO0VBQ1YsWUFBVztFQUNYLGlCQUFnQjtFQUNuQiwwQ0FBeUM7RUFFdEMsVUFBUyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvQ29tcG9uZW50cy91cGxvYWQtaW1nL3VwbG9hZC1pbWcuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvLyAuY2FudmFzIHtcclxuLy8gICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuLy8gICAgIHRvcDogMDtcclxuLy8gICAgIGxlZnQ6IDA7XHJcbi8vICAgICB6LWluZGV4OiAxMDtcclxuLy8gICAgIGJhY2tncm91bmQtY29sb3I6cmdiYSgyNTUsMCwwLDAuNSk7XHJcbi8vIH1cclxuXHJcblxyXG4jdmlkZW9fYm94e1xyXG4gICAgZmxvYXQ6bGVmdDtcclxufVxyXG4uY2FudmFzIHtcclxuICAgIHBvc2l0aW9uOmFic29sdXRlO1xyXG4gICAgZmxvYXQ6bGVmdDtcclxuICAgIHdpZHRoOjY0MHB4O1xyXG4gICAgbWluLWhlaWdodDozNzBweDtcclxuIGJhY2tncm91bmQtY29sb3I6cmdiYSgyMjMsIDIyMywgMjIzLCAwLjUpO1xyXG5cclxuICAgIHotaW5kZXg6MTtcclxufSJdfQ== */"
 
 /***/ }),
 
@@ -344,6 +344,14 @@ var UploadImgComponent = /** @class */ (function () {
     function UploadImgComponent() {
     }
     UploadImgComponent.prototype.ngOnInit = function () {
+        this.drawRectable();
+    };
+    UploadImgComponent.prototype.drawRectable = function () {
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        var xPos = 0;
+        var yPos = 0;
+        ctx.rect(xPos, yPos, 50, 50);
     };
     UploadImgComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -400,7 +408,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n  <h1>\n    Welcome to {{ title }}!\n  </h1>\n  <img width=\"300\" alt=\"Angular Logo\" src=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==\">\n</div>\n<h2>Here are some links to help you start: </h2>\n<ul>\n  <li>\n    <h2><a target=\"_blank\" rel=\"noopener\" href=\"https://angular.io/tutorial\">Tour of Heroes</a></h2>\n  </li>\n  <li>\n    <h2><a target=\"_blank\" rel=\"noopener\" href=\"https://angular.io/cli\">CLI Documentation</a></h2>\n  </li>\n  <li>\n    <h2><a target=\"_blank\" rel=\"noopener\" href=\"https://blog.angular.io/\">Angular blog</a></h2>\n  </li>\n</ul>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<app-upload-img></app-upload-img>\n<app-upload-img></app-upload-img>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -464,6 +472,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _Components_upload_img_upload_img_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Components/upload-img/upload-img.component */ "./src/app/Components/upload-img/upload-img.component.ts");
 /* harmony import */ var angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! angular-bootstrap-md */ "./node_modules/angular-bootstrap-md/esm5/angular-bootstrap-md.es5.js");
+/* harmony import */ var ngx_webcam__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-webcam */ "./node_modules/ngx-webcam/fesm5/ngx-webcam.js");
+
 
 
 
@@ -478,12 +488,13 @@ var AppModule = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
             declarations: [
                 _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                _Components_upload_img_upload_img_component__WEBPACK_IMPORTED_MODULE_5__["UploadImgComponent"]
+                _Components_upload_img_upload_img_component__WEBPACK_IMPORTED_MODULE_5__["UploadImgComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-                angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MDBBootstrapModule"].forRoot()
+                angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MDBBootstrapModule"].forRoot(),
+                ngx_webcam__WEBPACK_IMPORTED_MODULE_7__["WebcamModule"],
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
