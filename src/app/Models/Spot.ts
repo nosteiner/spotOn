@@ -1,13 +1,29 @@
-export class Spot {
-    constructor() { }
+import { Identifiers } from '@angular/compiler';
 
+export class Spot {
+    constructor(x, y) {
+        this.xPos = x;
+        this.yPos = y;
+        this.width = 4;
+        this.height = 2;
+    }
     public xPos: number;
     public yPos: number;
-
-    move() {
-
-    }
+    public width: number;
+    public height: number;
 
     rotate() {
+    }
+
+    resize(newWidth, newHeight) {
+        this.width = newWidth;
+        this.height = newHeight;
+    }
+
+    moveByX(delta) {
+        this.xPos += delta;
+    }
+    moveByY(delta) {
+        this.yPos += delta;
     }
 }
