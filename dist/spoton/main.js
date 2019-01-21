@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div id=\"wrap_video\">\n\n  <div id=\"video_box\">\n    <canvas class=\"canvas\" id=\"canvas\"></canvas>\n    <!-- <div>\n        <webcam></webcam>\n      </div> -->\n  </div>\n      \n  </div>"
+module.exports = "\n    <canvas class=\"canvas\" id='{{id}}' #canvas  style=\"width: 16cm; height: 9cm;\">\n    <app-video></app-video>\n    </canvas>\n"
 
 /***/ }),
 
@@ -322,7 +322,7 @@ module.exports = "\n<div id=\"wrap_video\">\n\n  <div id=\"video_box\">\n    <ca
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "#video_box {\n  float: left; }\n\n.canvas {\n  position: absolute;\n  float: left;\n  width: 640px;\n  min-height: 370px;\n  background-color: rgba(223, 223, 223, 0.5);\n  z-index: 1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9jYW52YXMvQzpcXFVzZXJzXFxub3N0ZVxcQ29kZVxcQW5ndWxhclxcc3BvdG9uL3NyY1xcYXBwXFxDb21wb25lbnRzXFxjYW52YXNcXGNhbnZhcy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFTQTtFQUNJLFdBQVUsRUFBQTs7QUFFZDtFQUNJLGtCQUFpQjtFQUNqQixXQUFVO0VBQ1YsWUFBVztFQUNYLGlCQUFnQjtFQUNuQiwwQ0FBeUM7RUFFdEMsVUFBUyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvQ29tcG9uZW50cy9jYW52YXMvY2FudmFzLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gLmNhbnZhcyB7XHJcbi8vICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbi8vICAgICB0b3A6IDA7XHJcbi8vICAgICBsZWZ0OiAwO1xyXG4vLyAgICAgei1pbmRleDogMTA7XHJcbi8vICAgICBiYWNrZ3JvdW5kLWNvbG9yOnJnYmEoMjU1LDAsMCwwLjUpO1xyXG4vLyB9XHJcblxyXG5cclxuI3ZpZGVvX2JveHtcclxuICAgIGZsb2F0OmxlZnQ7XHJcbn1cclxuLmNhbnZhcyB7XHJcbiAgICBwb3NpdGlvbjphYnNvbHV0ZTtcclxuICAgIGZsb2F0OmxlZnQ7XHJcbiAgICB3aWR0aDo2NDBweDtcclxuICAgIG1pbi1oZWlnaHQ6MzcwcHg7XHJcbiBiYWNrZ3JvdW5kLWNvbG9yOnJnYmEoMjIzLCAyMjMsIDIyMywgMC41KTtcclxuXHJcbiAgICB6LWluZGV4OjE7XHJcbn0iXX0= */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvY2FudmFzL2NhbnZhcy5jb21wb25lbnQuc2NzcyJ9 */"
 
 /***/ }),
 
@@ -350,51 +350,56 @@ var CanvasComponent = /** @class */ (function () {
         this.isRight = true;
     }
     CanvasComponent.prototype.ngOnInit = function () {
-        this.canvas = document.querySelector('canvas');
-        this.ctx = this.canvas.getContext('2d');
-        // this.spots = this.spotsService.spots;
-        this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](this.canvas.width / 2, this.canvas.height / 2);
-        // this.handleGetSpotsArray(this.isRight);
-        // this.handleAddToSpotsArray();
-        // this.drawSpots();
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        var htmlCanvasElement = this.canvas.nativeElement;
+        this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
         this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
         this.makeSpotMovable();
     };
-    CanvasComponent.prototype.newSpot = function () {
-        console.log(this.canvas.width / 2, this.canvas.height / 2);
-        return new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](this.canvas.width / 2, this.canvas.height / 2);
-    };
-    CanvasComponent.prototype.drawSpot = function (x, y, wid, hei) {
-        this.ctx.fillRect(x, y, wid, hei);
+    CanvasComponent.prototype.drawSpot = function (x, y, width, height) {
+        this.ctx.fillRect(x, y, width, height);
     };
     CanvasComponent.prototype.makeSpotMovable = function () {
         var _this = this;
+        var htmlCanvasElement = this.canvas.nativeElement;
         window.onkeydown = function (event) {
             var keyPr = event.keyCode;
             var moveBy = 0.1;
+            var moveByInPixel = _this.mmToPixel(moveBy);
             var up = 40;
             var down = 38;
             var right = 39;
             var left = 37;
-            if (keyPr === right && _this.spot.xPos < _this.canvas.width) {
-                _this.spot.moveByX(moveBy); // right arrow add 20 from current
+            if (keyPr === right && _this.spot.xPos < htmlCanvasElement.width) {
+                _this.spot.moveByX(moveByInPixel); // right arrow add 20 from current
             }
             else if (keyPr === left && _this.spot.xPos > 0) {
-                _this.spot.moveByX(-moveBy); // left arrow subtract 20 from current
+                _this.spot.moveByX(-moveByInPixel); // left arrow subtract 20 from current
             }
-            else if (keyPr === up && _this.spot.yPos < _this.canvas.height) {
-                _this.spot.moveByY(moveBy); // top arrow subtract 20 from current
+            else if (keyPr === up && _this.spot.yPos < htmlCanvasElement.height) {
+                _this.spot.moveByY(moveByInPixel); // top arrow subtract 20 from current
             }
             else if (keyPr === down && _this.spot.yPos > 0) {
-                _this.spot.moveByY(-moveBy); // bottom arrow add 20 from current
+                _this.spot.moveByY(-moveByInPixel); // bottom arrow add 20 from current
             }
             /*clearing anything drawn on canvas
              *comment this below do draw path */
             _this.ctx.clearRect(0, 0, 500, 500);
             // Drawing rectangle at new position
-            _this.drawSpot(_this.spot.xPos, _this.spot.yPos, _this.spot.width, _this.spot.width);
+            _this.drawSpot(_this.spot.xPos, _this.spot.yPos, _this.spot.width, _this.spot.height);
         };
     };
+    CanvasComponent.prototype.mmToPixel = function (mm) {
+        return 3.7795275591 * mm;
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Number)
+    ], CanvasComponent.prototype, "id", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('canvas'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+    ], CanvasComponent.prototype, "canvas", void 0);
     CanvasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-canvas',
@@ -417,7 +422,7 @@ var CanvasComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  lens works!\n</p>\n"
+module.exports = "\n"
 
 /***/ }),
 
@@ -428,7 +433,7 @@ module.exports = "<p>\n  lens works!\n</p>\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIn0= */"
+module.exports = "app-canvas {\n  position: absolute;\n  float: left;\n  width: 16cm;\n  height: 9cm;\n  background-color: rgba(223, 223, 223, 0.5);\n  z-index: 1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLGtCQUFpQjtFQUNqQixXQUFVO0VBQ1YsV0FBVTtFQUNWLFdBQVU7RUFDViwwQ0FBeUM7RUFFekMsVUFBUyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL2xlbnMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJhcHAtY2FudmFzIHtcclxuICAgIHBvc2l0aW9uOmFic29sdXRlO1xyXG4gICAgZmxvYXQ6bGVmdDtcclxuICAgIHdpZHRoOjE2Y207XHJcbiAgICBoZWlnaHQ6OWNtO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjpyZ2JhKDIyMywgMjIzLCAyMjMsIDAuNSk7XHJcblxyXG4gICAgei1pbmRleDoxO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -585,7 +590,7 @@ var SpotComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = "<video></video>\n"
 
 /***/ }),
 
@@ -596,7 +601,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvdmlkZW8vdmlkZW8uY29tcG9uZW50LnNjc3MifQ== */"
+module.exports = "video {\n  width: 16cm;\n  height: 9cm; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy92aWRlby9DOlxcVXNlcnNcXG5vc3RlXFxDb2RlXFxBbmd1bGFyXFxzcG90b24vc3JjXFxhcHBcXENvbXBvbmVudHNcXHZpZGVvXFx2aWRlby5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLFdBQVc7RUFDWCxXQUFXLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9Db21wb25lbnRzL3ZpZGVvL3ZpZGVvLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsidmlkZW97XHJcbiAgICB3aWR0aDogMTZjbTtcclxuICAgIGhlaWdodDogOWNtO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -618,7 +623,21 @@ var VideoComponent = /** @class */ (function () {
     function VideoComponent() {
     }
     VideoComponent.prototype.ngOnInit = function () {
+        // this.initCamera();
     };
+    VideoComponent.prototype.initCamera = function () {
+        var video = document.parentElement.querySelector('video');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            }).catch(function (error) { return console.error('getUserMedia() error:', error); });
+        }
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], VideoComponent.prototype, "videoId", void 0);
     VideoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-video',
@@ -748,7 +767,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-canvas></app-canvas>\n<router-outlet></router-outlet>\n"
+module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n<app-canvas [id]=1>   \n</app-canvas>\n<app-canvas [id]=2>   \n</app-canvas>\n\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
