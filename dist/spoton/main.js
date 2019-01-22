@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"container\">\n    <canvas class=\"canvas\" id='{{id}}' #canvas style=\"width: 16cm; height: 9cm;\">\n    </canvas>\n    <webcam class=\"video\"></webcam>\n</div>"
+module.exports = "    <canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #canvas></canvas>\n    <app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n    <!-- <button (click)=\"brightness('+')\">+</button>\n    <button (click)=\"brightness('-')\">-</button> -->\n    <label for=\"brightnessRange\">brightness</label>\n    <input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n    <label for=\"contrastRange\">contrast</label>\n    <input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
 
 /***/ }),
 
@@ -322,7 +322,7 @@ module.exports = "<div id=\"container\">\n    <canvas class=\"canvas\" id='{{id}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "#container {\n  width: 100px;\n  height: 100px;\n  position: relative; }\n\n.video, .canvas {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0; }\n\n.canvas {\n  z-index: 10; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9jYW52YXMvQzpcXFVzZXJzXFxub3N0ZVxcQ29kZVxcQW5ndWxhclxcc3BvdG9uL3NyY1xcYXBwXFxDb21wb25lbnRzXFxjYW52YXNcXGNhbnZhcy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNJLFlBQVk7RUFDWixhQUFhO0VBQ2Isa0JBQWtCLEVBQUE7O0FBRXBCO0VBQ0UsV0FBVztFQUNYLFlBQVk7RUFDWixrQkFBa0I7RUFDbEIsTUFBTTtFQUNOLE9BQU8sRUFBQTs7QUFFVDtFQUNFLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvY2FudmFzL2NhbnZhcy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIlxyXG4jY29udGFpbmVyIHtcclxuICAgIHdpZHRoOiAxMDBweDtcclxuICAgIGhlaWdodDogMTAwcHg7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgfVxyXG4gIC52aWRlbywgLmNhbnZhcyB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIHRvcDogMDtcclxuICAgIGxlZnQ6IDA7XHJcbiAgfVxyXG4gIC5jYW52YXMge1xyXG4gICAgei1pbmRleDogMTA7XHJcbiAgfSJdfQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvY2FudmFzL2NhbnZhcy5jb21wb25lbnQuc2NzcyJ9 */"
 
 /***/ }),
 
@@ -348,6 +348,8 @@ var CanvasComponent = /** @class */ (function () {
     function CanvasComponent(spotsService) {
         this.spotsService = spotsService;
         this.isRight = true;
+        this.brightnessLevel = 0;
+        this.contrastLevel = 0;
     }
     CanvasComponent.prototype.ngOnInit = function () {
         if (this.isActive) {
@@ -391,12 +393,32 @@ var CanvasComponent = /** @class */ (function () {
         return 3.7795275591 * mm;
     };
     CanvasComponent.prototype.initCanvas = function () {
-        console.log(this.id);
         this.ctx = this.canvas.nativeElement.getContext('2d');
         var htmlCanvasElement = this.canvas.nativeElement;
         this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
         this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
         this.makeSpotMovable();
+    };
+    CanvasComponent.prototype.loadVideoToCanvas = function (video) {
+        var _this = this;
+        this.video = video;
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        this.video.addEventListener('play', function () {
+            window.setInterval(function () {
+                _this.ctx.drawImage(_this.video, 5, 5, 260, 125);
+            }, 20);
+        }, false);
+    };
+    CanvasComponent.prototype.changeBrightness = function (value) {
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        this.brightnessLevel = value / 100;
+        return this.ctx.filter = "brightness(" + this.brightnessLevel + ")";
+    };
+    CanvasComponent.prototype.changeContrast = function (value) {
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        this.contrastLevel = value;
+        console.log(this.ctx.filter = "contrast(" + this.contrastLevel + ")");
+        return this.ctx.filter = "contrast(" + this.contrastLevel + ")";
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -505,7 +527,7 @@ var GlassesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n"
+module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n\n"
 
 /***/ }),
 
@@ -516,7 +538,7 @@ module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "app-canvas {\n  position: absolute;\n  float: left;\n  width: 16cm;\n  height: 9cm;\n  background-color: rgba(223, 223, 223, 0.5);\n  z-index: 1; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLGtCQUFpQjtFQUNqQixXQUFVO0VBQ1YsV0FBVTtFQUNWLFdBQVU7RUFDViwwQ0FBeUM7RUFFekMsVUFBUyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL2xlbnMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJhcHAtY2FudmFzIHtcclxuICAgIHBvc2l0aW9uOmFic29sdXRlO1xyXG4gICAgZmxvYXQ6bGVmdDtcclxuICAgIHdpZHRoOjE2Y207XHJcbiAgICBoZWlnaHQ6OWNtO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjpyZ2JhKDIyMywgMjIzLCAyMjMsIDAuNSk7XHJcblxyXG4gICAgei1pbmRleDoxO1xyXG59Il19 */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIn0= */"
 
 /***/ }),
 
@@ -674,6 +696,62 @@ var SpotComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/Components/video-canvas/video-canvas.component.html":
+/*!*********************************************************************!*\
+  !*** ./src/app/Components/video-canvas/video-canvas.component.html ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n<label for=\"brightnessRange\">brightness</label>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n<label for=\"contrastRange\">contrast</label>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
+
+/***/ }),
+
+/***/ "./src/app/Components/video-canvas/video-canvas.component.scss":
+/*!*********************************************************************!*\
+  !*** ./src/app/Components/video-canvas/video-canvas.component.scss ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvdmlkZW8tY2FudmFzL3ZpZGVvLWNhbnZhcy5jb21wb25lbnQuc2NzcyJ9 */"
+
+/***/ }),
+
+/***/ "./src/app/Components/video-canvas/video-canvas.component.ts":
+/*!*******************************************************************!*\
+  !*** ./src/app/Components/video-canvas/video-canvas.component.ts ***!
+  \*******************************************************************/
+/*! exports provided: VideoCanvasComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VideoCanvasComponent", function() { return VideoCanvasComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var VideoCanvasComponent = /** @class */ (function () {
+    function VideoCanvasComponent() {
+    }
+    VideoCanvasComponent.prototype.ngOnInit = function () {
+    };
+    VideoCanvasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-video-canvas',
+            template: __webpack_require__(/*! ./video-canvas.component.html */ "./src/app/Components/video-canvas/video-canvas.component.html"),
+            styles: [__webpack_require__(/*! ./video-canvas.component.scss */ "./src/app/Components/video-canvas/video-canvas.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], VideoCanvasComponent);
+    return VideoCanvasComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/Components/video/video.component.html":
 /*!*******************************************************!*\
   !*** ./src/app/Components/video/video.component.html ***!
@@ -681,7 +759,7 @@ var SpotComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<video></video>\n"
+module.exports = "<video #videoElement></video>\n"
 
 /***/ }),
 
@@ -692,7 +770,7 @@ module.exports = "<video></video>\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "video {\n  width: 16cm;\n  height: 9cm; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy92aWRlby9DOlxcVXNlcnNcXG5vc3RlXFxDb2RlXFxBbmd1bGFyXFxzcG90b24vc3JjXFxhcHBcXENvbXBvbmVudHNcXHZpZGVvXFx2aWRlby5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLFdBQVc7RUFDWCxXQUFXLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9Db21wb25lbnRzL3ZpZGVvL3ZpZGVvLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsidmlkZW97XHJcbiAgICB3aWR0aDogMTZjbTtcclxuICAgIGhlaWdodDogOWNtO1xyXG59Il19 */"
+module.exports = "video {\n  width: 0px;\n  height: 0px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy92aWRlby9DOlxcVXNlcnNcXG5vc3RlXFxDb2RlXFxBbmd1bGFyXFxzcG90b24vc3JjXFxhcHBcXENvbXBvbmVudHNcXHZpZGVvXFx2aWRlby5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLFVBQVU7RUFDVixXQUFXLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9Db21wb25lbnRzL3ZpZGVvL3ZpZGVvLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsidmlkZW97XHJcbiAgICB3aWR0aDogMHB4O1xyXG4gICAgaGVpZ2h0OiAwcHg7XHJcbn0iXX0= */"
 
 /***/ }),
 
@@ -712,16 +790,20 @@ __webpack_require__.r(__webpack_exports__);
 
 var VideoComponent = /** @class */ (function () {
     function VideoComponent() {
+        this.videoStream = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     VideoComponent.prototype.ngOnInit = function () {
-        // this.initCamera();
+        this.video = this.videoElement.nativeElement;
+        this.initCamera();
     };
     VideoComponent.prototype.initCamera = function () {
-        var video = document.parentElement.querySelector('video');
+        // const video = document.querySelector('video');
+        var _this = this;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-                video.srcObject = stream;
-                video.play();
+                _this.video.srcObject = stream;
+                _this.videoStream.emit(_this.video);
+                _this.video.play();
             }).catch(function (error) { return console.error('getUserMedia() error:', error); });
         }
     };
@@ -729,6 +811,14 @@ var VideoComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
     ], VideoComponent.prototype, "videoId", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], VideoComponent.prototype, "videoStream", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('videoElement'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], VideoComponent.prototype, "videoElement", void 0);
     VideoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-video',
@@ -928,6 +1018,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/settings/settings.component */ "./src/app/Components/settings/settings.component.ts");
 /* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
 /* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
+/* harmony import */ var _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/video-canvas/video-canvas.component */ "./src/app/Components/video-canvas/video-canvas.component.ts");
+
 
 
 
@@ -954,6 +1046,7 @@ var AppModule = /** @class */ (function () {
                 _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__["SettingsComponent"],
                 _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__["LensComponent"],
                 _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__["GlassesComponent"],
+                _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__["VideoCanvasComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],

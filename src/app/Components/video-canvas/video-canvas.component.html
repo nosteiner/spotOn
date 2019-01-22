@@ -1,0 +1,10 @@
+<canvas class="canvas" style="width: 16cm; height: 9;" id='{{id}}' #videoCanvas></canvas>
+<app-video (videoStream)="loadVideoToCanvas($event)"></app-video>
+<!-- <button (click)="brightness('+')">+</button>
+<button (click)="brightness('-')">-</button> -->
+<label for="brightnessRange">brightness</label>
+<input id="brightnessRange" type="range" min="0" max="200" #brightness (change)="changeBrightness(brightness.value)" value=100>
+<label for="contrastRange">contrast</label>
+<input id="contrastRange" type="range" min="0" max="100" #contrast (change)="changeContrast(contrast.value)" value=100>
+
+

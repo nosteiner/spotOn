@@ -6,7 +6,6 @@ import { Spot } from 'src/app/Models/Spot';
   providedIn: 'root'
 })
 export class SpotsService {
-
   spots = [];
 
   constructor() { }

@@ -12,6 +12,7 @@ import { CanvasComponent } from './Components/canvas/canvas.component';
 import { SettingsComponent } from './Components/settings/settings.component';
 import { LensComponent } from './Components/lens/lens.component';
 import { GlassesComponent } from './Components/glasses/glasses.component';
+import { VideoCanvasComponent } from './Components/video-canvas/video-canvas.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { GlassesComponent } from './Components/glasses/glasses.component';
     SettingsComponent,
     LensComponent,
     GlassesComponent,
+    VideoCanvasComponent,
 
   ],
   imports: [

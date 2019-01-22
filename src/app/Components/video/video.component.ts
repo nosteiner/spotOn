@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-video',
@@ -10,18 +10,26 @@ export class VideoComponent implements OnInit {
   constructor() { }
 
   @Input() videoId: string;
+  @Output() videoStream = new EventEmitter<HTMLVideoElement>();
+
+
+  @ViewChild('videoElement') videoElement: any;
+
+  video: any;
   ngOnInit() {
-    // this.initCamera();
+    this.video = this.videoElement.nativeElement;
+    this.initCamera();
   }
 
   initCamera() {
 
-    const video = document.parentElement.querySelector('video');
+    // const video = document.querySelector('video');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-        video.srcObject = stream;
-        video.play();
+      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        this.video.srcObject = stream;
+        this.videoStream.emit(this.video);
+        this.video.play();
       }).catch(error => console.error('getUserMedia() error:', error));
     }
   }

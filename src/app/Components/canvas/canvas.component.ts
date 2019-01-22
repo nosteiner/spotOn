@@ -16,6 +16,10 @@ export class CanvasComponent implements OnInit {
   // spots = [];
   ctx: CanvasRenderingContext2D;
   spot: Spot;
+  video: HTMLVideoElement;
+  brightnessLevel = 0;
+  contrastLevel = 0;
+
   @Input() id: string;
   @Input() isActive: boolean;
 
@@ -67,11 +71,34 @@ export class CanvasComponent implements OnInit {
   }
 
   initCanvas() {
-    console.log(this.id);
     this.ctx = this.canvas.nativeElement.getContext('2d');
     const htmlCanvasElement = this.canvas.nativeElement as HTMLCanvasElement;
     this.spot = new Spot(htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
     this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
     this.makeSpotMovable();
   }
+
+  loadVideoToCanvas(video) {
+    this.video = video;
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.video.addEventListener('play', () => {
+      window.setInterval(() => {
+        this.ctx.drawImage(this.video, 5, 5, 260, 125);
+      }, 20);
+    }, false);
+  }
+
+  changeBrightness(value) {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.brightnessLevel = value / 100;
+    return this.ctx.filter = `brightness(${this.brightnessLevel})`;
+  }
+
+  changeContrast(value) {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.contrastLevel = value;
+    console.log(this.ctx.filter = `contrast(${this.contrastLevel})`);
+    return this.ctx.filter = `contrast(${this.contrastLevel})`;
+  }
+
 }
