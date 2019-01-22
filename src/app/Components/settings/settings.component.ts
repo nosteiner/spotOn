@@ -8,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 export class SettingsComponent implements OnInit {
   constructor() { }
 
+  brightnessLevel: number;
+  contrastLevel: number;
+
   ngOnInit() {
   }
 
+  changeBrightness(value) {
+    console.log(value);
+  }
 }

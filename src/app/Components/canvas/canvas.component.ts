@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
-import { SpotsService } from 'src/app/Services/spots.service';
 import { Spot } from 'src/app/Models/Spot';
 import { Lens } from 'src/app/Models/Lens';
+import { GlassesService } from 'src/app/Services/glasses.service';
 
 @Component({
   selector: 'app-canvas',
@@ -10,15 +10,11 @@ import { Lens } from 'src/app/Models/Lens';
 })
 export class CanvasComponent implements OnInit {
 
-  constructor(private spotsService: SpotsService) { }
+  constructor(private glassesService: GlassesService) {
+  }
 
-  isRight = true;
-  // spots = [];
   ctx: CanvasRenderingContext2D;
   spot: Spot;
-  video: HTMLVideoElement;
-  brightnessLevel = 0;
-  contrastLevel = 0;
 
   @Input() id: string;
   @Input() isActive: boolean;
@@ -26,22 +22,26 @@ export class CanvasComponent implements OnInit {
   @ViewChild('canvas') canvas: ElementRef;
 
   ngOnInit() {
-    if (this.isActive) {
-      this.initCanvas();
-    }
+    this.spot = this.glassesService.getSpot(this.id, 0);
+    this.initCanvas();
+  }
+
+  initCanvas() {
+    this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
+    this.moveSpotOnKeyDown();
   }
 
   drawSpot(x, y, width, height) {
     this.ctx.fillRect(x, y, width, height);
   }
 
-  makeSpotMovable() {
+  moveSpotOnKeyDown() {
     const htmlCanvasElement = this.canvas.nativeElement as HTMLCanvasElement;
-
     window.onkeydown = (event) => {
       const keyPr = event.keyCode;
       const moveBy = 0.1;
-      const moveByInPixel = this.mmToPixel(moveBy);
+      const moveByInPixel = this.mmToPixelOnWindose(moveBy);
 
       const up = 40;
       const down = 38;
@@ -61,44 +61,14 @@ export class CanvasComponent implements OnInit {
        *comment this below do draw path */
       this.ctx.clearRect(0, 0, 500, 500);
 
+      this.glassesService.glasses.setSpotPos(this.spot, 0, this.id); /*hard coded 0 - as index of spot in the spots array*/
       // Drawing rectangle at new position
       this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
     };
   }
 
-  mmToPixel(mm) {
+  mmToPixelOnWindose(mm) {
     return 3.7795275591 * mm;
-  }
-
-  initCanvas() {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    const htmlCanvasElement = this.canvas.nativeElement as HTMLCanvasElement;
-    this.spot = new Spot(htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
-    this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
-    this.makeSpotMovable();
-  }
-
-  loadVideoToCanvas(video) {
-    this.video = video;
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.video.addEventListener('play', () => {
-      window.setInterval(() => {
-        this.ctx.drawImage(this.video, 5, 5, 260, 125);
-      }, 20);
-    }, false);
-  }
-
-  changeBrightness(value) {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.brightnessLevel = value / 100;
-    return this.ctx.filter = `brightness(${this.brightnessLevel})`;
-  }
-
-  changeContrast(value) {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.contrastLevel = value;
-    console.log(this.ctx.filter = `contrast(${this.contrastLevel})`);
-    return this.ctx.filter = `contrast(${this.contrastLevel})`;
   }
 
 }

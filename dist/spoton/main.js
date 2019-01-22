@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "    <canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #canvas></canvas>\n    <app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n    <!-- <button (click)=\"brightness('+')\">+</button>\n    <button (click)=\"brightness('-')\">-</button> -->\n    <label for=\"brightnessRange\">brightness</label>\n    <input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n    <label for=\"contrastRange\">contrast</label>\n    <input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
+module.exports = "    <canvas class=\"canvas\" style=\"width: 16cm; height: 9cm;\" id='{{id}}' #canvas></canvas>\n"
 
 /***/ }),
 
@@ -338,34 +338,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CanvasComponent", function() { return CanvasComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var src_app_Services_spots_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/Services/spots.service */ "./src/app/Services/spots.service.ts");
-/* harmony import */ var src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/Models/Spot */ "./src/app/Models/Spot.ts");
-
+/* harmony import */ var src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/Services/glasses.service */ "./src/app/Services/glasses.service.ts");
 
 
 
 var CanvasComponent = /** @class */ (function () {
-    function CanvasComponent(spotsService) {
-        this.spotsService = spotsService;
-        this.isRight = true;
-        this.brightnessLevel = 0;
-        this.contrastLevel = 0;
+    function CanvasComponent(glassesService) {
+        this.glassesService = glassesService;
     }
     CanvasComponent.prototype.ngOnInit = function () {
-        if (this.isActive) {
-            this.initCanvas();
-        }
+        this.spot = this.glassesService.getSpot(this.id, 0);
+        this.initCanvas();
+    };
+    CanvasComponent.prototype.initCanvas = function () {
+        this.ctx = this.canvas.nativeElement.getContext('2d');
+        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
+        this.moveSpotOnKeyDown();
     };
     CanvasComponent.prototype.drawSpot = function (x, y, width, height) {
         this.ctx.fillRect(x, y, width, height);
     };
-    CanvasComponent.prototype.makeSpotMovable = function () {
+    CanvasComponent.prototype.moveSpotOnKeyDown = function () {
         var _this = this;
         var htmlCanvasElement = this.canvas.nativeElement;
         window.onkeydown = function (event) {
             var keyPr = event.keyCode;
             var moveBy = 0.1;
-            var moveByInPixel = _this.mmToPixel(moveBy);
+            var moveByInPixel = _this.mmToPixelOnWindose(moveBy);
             var up = 40;
             var down = 38;
             var right = 39;
@@ -385,40 +384,13 @@ var CanvasComponent = /** @class */ (function () {
             /*clearing anything drawn on canvas
              *comment this below do draw path */
             _this.ctx.clearRect(0, 0, 500, 500);
+            _this.glassesService.glasses.setSpotPos(_this.spot, 0, _this.id); /*hard coded 0 - as index of spot in the spots array*/
             // Drawing rectangle at new position
             _this.drawSpot(_this.spot.xPos, _this.spot.yPos, _this.spot.width, _this.spot.height);
         };
     };
-    CanvasComponent.prototype.mmToPixel = function (mm) {
+    CanvasComponent.prototype.mmToPixelOnWindose = function (mm) {
         return 3.7795275591 * mm;
-    };
-    CanvasComponent.prototype.initCanvas = function () {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        var htmlCanvasElement = this.canvas.nativeElement;
-        this.spot = new src_app_Models_Spot__WEBPACK_IMPORTED_MODULE_3__["Spot"](htmlCanvasElement.width / 2, htmlCanvasElement.height / 2);
-        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
-        this.makeSpotMovable();
-    };
-    CanvasComponent.prototype.loadVideoToCanvas = function (video) {
-        var _this = this;
-        this.video = video;
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.video.addEventListener('play', function () {
-            window.setInterval(function () {
-                _this.ctx.drawImage(_this.video, 5, 5, 260, 125);
-            }, 20);
-        }, false);
-    };
-    CanvasComponent.prototype.changeBrightness = function (value) {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.brightnessLevel = value / 100;
-        return this.ctx.filter = "brightness(" + this.brightnessLevel + ")";
-    };
-    CanvasComponent.prototype.changeContrast = function (value) {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.contrastLevel = value;
-        console.log(this.ctx.filter = "contrast(" + this.contrastLevel + ")");
-        return this.ctx.filter = "contrast(" + this.contrastLevel + ")";
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -438,7 +410,7 @@ var CanvasComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./canvas.component.html */ "./src/app/Components/canvas/canvas.component.html"),
             styles: [__webpack_require__(/*! ./canvas.component.scss */ "./src/app/Components/canvas/canvas.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_Services_spots_service__WEBPACK_IMPORTED_MODULE_2__["SpotsService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__["GlassesService"]])
     ], CanvasComponent);
     return CanvasComponent;
 }());
@@ -481,16 +453,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GlassesComponent", function() { return GlassesComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/Services/glasses.service */ "./src/app/Services/glasses.service.ts");
+
 
 
 var GlassesComponent = /** @class */ (function () {
-    function GlassesComponent() {
-        this.L = 'L';
-        this.R = 'R';
+    function GlassesComponent(glassesService) {
+        this.glassesService = glassesService;
+        this.L = false;
+        this.R = true;
         this.isActiveL = false;
         this.isActiveR = true;
     }
     GlassesComponent.prototype.ngOnInit = function () {
+        console.log(this.glassesService.glasses);
     };
     GlassesComponent.prototype.handleKeyboardEvent = function (event) {
         var keyPr = event.keyCode;
@@ -511,7 +487,7 @@ var GlassesComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./glasses.component.html */ "./src/app/Components/glasses/glasses.component.html"),
             styles: [__webpack_require__(/*! ./glasses.component.scss */ "./src/app/Components/glasses/glasses.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__["GlassesService"]])
     ], GlassesComponent);
     return GlassesComponent;
 }());
@@ -527,7 +503,7 @@ var GlassesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n\n"
+module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<app-video-canvas></app-video-canvas>\n"
 
 /***/ }),
 
@@ -538,7 +514,7 @@ module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIn0= */"
+module.exports = "app-canvas {\n  position: absolute;\n  height: 100%;\n  width: 100%; }\n\napp-video-canvas {\n  height: 100%;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDRztFQUNDLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVyxFQUFBOztBQUVaO0VBQ0MsWUFBWTtFQUNaLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcblx0XHRcdGFwcC1jYW52YXMgeyBcclxuXHRcdFx0XHRwb3NpdGlvbjogYWJzb2x1dGU7IFxyXG5cdFx0XHRcdGhlaWdodDogMTAwJTsgXHJcblx0XHRcdFx0d2lkdGg6IDEwMCU7IFxyXG5cdFx0XHR9IFxyXG5cdFx0XHRhcHAtdmlkZW8tY2FudmFzIHsgXHJcblx0XHRcdFx0aGVpZ2h0OiAxMDAlOyBcclxuXHRcdFx0XHR3aWR0aDogMTAwJTsgXHJcblx0XHRcdH0gXHJcblx0XHRcdFx0IFxyXG4iXX0= */"
 
 /***/ }),
 
@@ -591,7 +567,7 @@ var LensComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  settings works!\n</p>\n"
+module.exports = "<div>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\"  [(ngModel)]=\"brightnessLevel\" value=100>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\"  [(ngModel)]=\"contrastLevel\" value=100>\n</div>"
 
 /***/ }),
 
@@ -625,6 +601,9 @@ var SettingsComponent = /** @class */ (function () {
     }
     SettingsComponent.prototype.ngOnInit = function () {
     };
+    SettingsComponent.prototype.changeBrightness = function (value) {
+        console.log(value);
+    };
     SettingsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-settings',
@@ -634,62 +613,6 @@ var SettingsComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
     ], SettingsComponent);
     return SettingsComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/Components/spot/spot.component.html":
-/*!*****************************************************!*\
-  !*** ./src/app/Components/spot/spot.component.html ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ""
-
-/***/ }),
-
-/***/ "./src/app/Components/spot/spot.component.scss":
-/*!*****************************************************!*\
-  !*** ./src/app/Components/spot/spot.component.scss ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvc3BvdC9zcG90LmNvbXBvbmVudC5zY3NzIn0= */"
-
-/***/ }),
-
-/***/ "./src/app/Components/spot/spot.component.ts":
-/*!***************************************************!*\
-  !*** ./src/app/Components/spot/spot.component.ts ***!
-  \***************************************************/
-/*! exports provided: SpotComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpotComponent", function() { return SpotComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-
-
-var SpotComponent = /** @class */ (function () {
-    function SpotComponent() {
-    }
-    SpotComponent.prototype.ngOnInit = function () {
-    };
-    SpotComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-spot',
-            template: __webpack_require__(/*! ./spot.component.html */ "./src/app/Components/spot/spot.component.html"),
-            styles: [__webpack_require__(/*! ./spot.component.scss */ "./src/app/Components/spot/spot.component.scss")]
-        }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
-    ], SpotComponent);
-    return SpotComponent;
 }());
 
 
@@ -734,9 +657,44 @@ __webpack_require__.r(__webpack_exports__);
 
 var VideoCanvasComponent = /** @class */ (function () {
     function VideoCanvasComponent() {
+        this.isRight = true;
+        this.brightnessLevel = 0;
+        this.contrastLevel = 0;
     }
     VideoCanvasComponent.prototype.ngOnInit = function () {
+        this.initCanvas();
     };
+    VideoCanvasComponent.prototype.initCanvas = function () {
+        this.ctx = this.videoCanvas.nativeElement.getContext('2d');
+    };
+    VideoCanvasComponent.prototype.loadVideoToCanvas = function (video) {
+        var _this = this;
+        this.video = video;
+        this.ctx = this.videoCanvas.nativeElement.getContext('2d');
+        this.video.addEventListener('play', function () {
+            window.setInterval(function () {
+                _this.ctx.drawImage(_this.video, 5, 5, 260, 125);
+            }, 20);
+        }, false);
+    };
+    VideoCanvasComponent.prototype.changeBrightness = function (value) {
+        this.ctx = this.videoCanvas.nativeElement.getContext('2d');
+        this.brightnessLevel = value / 100;
+        return this.ctx.filter = "brightness(" + this.brightnessLevel + ")";
+    };
+    VideoCanvasComponent.prototype.changeContrast = function (value) {
+        this.ctx = this.videoCanvas.nativeElement.getContext('2d');
+        this.contrastLevel = value;
+        return this.ctx.filter = "contrast(" + this.contrastLevel + ")";
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], VideoCanvasComponent.prototype, "id", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('videoCanvas'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+    ], VideoCanvasComponent.prototype, "videoCanvas", void 0);
     VideoCanvasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-video-canvas',
@@ -834,6 +792,101 @@ var VideoComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/Models/Glasses.ts":
+/*!***********************************!*\
+  !*** ./src/app/Models/Glasses.ts ***!
+  \***********************************/
+/*! exports provided: Glasses */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Glasses", function() { return Glasses; });
+/* harmony import */ var _Lens__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Lens */ "./src/app/Models/Lens.ts");
+
+var Glasses = /** @class */ (function () {
+    function Glasses() {
+        this.lenses = Array();
+        this.addToLensesArray(new _Lens__WEBPACK_IMPORTED_MODULE_0__["Lens"](true));
+        this.addToLensesArray(new _Lens__WEBPACK_IMPORTED_MODULE_0__["Lens"](false));
+    }
+    Glasses.prototype.setSpotPos = function (spot, spotIndex, isRight) {
+        var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
+        this.lenses[index].spots[spotIndex] = spot;
+    };
+    Glasses.prototype.getSpot = function (isRight, spotIndex) {
+        var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
+        console.log(isRight);
+        return this.lenses[index].spots[spotIndex];
+    };
+    Glasses.prototype.addToLensesArray = function (lens) {
+        this.lenses.push(lens);
+    };
+    return Glasses;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/Models/Lens.ts":
+/*!********************************!*\
+  !*** ./src/app/Models/Lens.ts ***!
+  \********************************/
+/*! exports provided: Lens */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Lens", function() { return Lens; });
+/* harmony import */ var _Settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Settings */ "./src/app/Models/Settings.ts");
+/* harmony import */ var _Spot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Spot */ "./src/app/Models/Spot.ts");
+
+
+var Lens = /** @class */ (function () {
+    function Lens(isRight) {
+        this.isRight = isRight;
+        this.spots = new Array();
+        this.settings = new _Settings__WEBPACK_IMPORTED_MODULE_0__["Settings"]();
+        this.spots.push(new _Spot__WEBPACK_IMPORTED_MODULE_1__["Spot"](150, 75));
+    }
+    Lens.prototype.pushToSpotsArray = function (spot) {
+        this.spots.push(spot);
+    };
+    Lens.prototype.mmToPixelOnWindose = function (mm) {
+        return 3.7795275591 * mm;
+    };
+    return Lens;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/Models/Settings.ts":
+/*!************************************!*\
+  !*** ./src/app/Models/Settings.ts ***!
+  \************************************/
+/*! exports provided: Settings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return Settings; });
+var Settings = /** @class */ (function () {
+    function Settings() {
+        this.brightness = 100;
+        this.contrast = 100;
+    }
+    Settings.prototype.set = function (brightness, contrast) {
+    };
+    return Settings;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/Models/Spot.ts":
 /*!********************************!*\
   !*** ./src/app/Models/Spot.ts ***!
@@ -870,38 +923,59 @@ var Spot = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/Services/spots.service.ts":
-/*!*******************************************!*\
-  !*** ./src/app/Services/spots.service.ts ***!
-  \*******************************************/
-/*! exports provided: SpotsService */
+/***/ "./src/app/Services/glasses.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/Services/glasses.service.ts ***!
+  \*********************************************/
+/*! exports provided: GlassesService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpotsService", function() { return SpotsService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GlassesService", function() { return GlassesService; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Models/Glasses */ "./src/app/Models/Glasses.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 
 
-var SpotsService = /** @class */ (function () {
-    function SpotsService() {
-        this.spots = [];
+
+
+
+var GlassesService = /** @class */ (function () {
+    function GlassesService(http) {
+        this.http = http;
+        this.glassesSbject = new rxjs__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
+        this.glasses = new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]();
+        // this.glassesObservable = this.glassesSbject.asObservable();
+        // this.getGlasses();
     }
-    SpotsService.prototype.getSpots = function (isRight) {
-        return this.spots;
+    GlassesService.prototype.updateGlasses = function () {
+        var _this = this;
+        this.http.put("/updateGlasses", this.glasses).subscribe(function () {
+            _this.getGlasses();
+        });
     };
-    SpotsService.prototype.addToSpotsArray = function (newSpot) {
-        this.spots.push(newSpot);
-        console.log(this.spots);
+    GlassesService.prototype.getGlasses = function () {
+        // this.http.get<Glasses>('/glasses').subscribe((data) => {
+        //   this.glasses = data;
+        //   console.log( typeof this.glasses);
+        //   this.glassesSbject.next( this.glasses = data);
+        // });
+        return this.glasses;
     };
-    SpotsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    GlassesService.prototype.getSpot = function (isRight, spotIndex) {
+        console.log(isRight);
+        return this.glasses.getSpot(isRight, spotIndex);
+    };
+    GlassesService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
             providedIn: 'root'
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
-    ], SpotsService);
-    return SpotsService;
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
+    ], GlassesService);
+    return GlassesService;
 }());
 
 
@@ -948,7 +1022,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n\n<app-glasses></app-glasses>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n\n<app-glasses></app-glasses>\n<app-settings></app-settings>\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -1008,17 +1082,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! angular-bootstrap-md */ "./node_modules/angular-bootstrap-md/esm5/angular-bootstrap-md.es5.js");
-/* harmony import */ var ngx_webcam__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-webcam */ "./node_modules/ngx-webcam/fesm5/ngx-webcam.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _Components_video_video_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Components/video/video.component */ "./src/app/Components/video/video.component.ts");
-/* harmony import */ var _Components_spot_spot_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Components/spot/spot.component */ "./src/app/Components/spot/spot.component.ts");
-/* harmony import */ var _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/canvas/canvas.component */ "./src/app/Components/canvas/canvas.component.ts");
-/* harmony import */ var _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/settings/settings.component */ "./src/app/Components/settings/settings.component.ts");
-/* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
-/* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
-/* harmony import */ var _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/video-canvas/video-canvas.component */ "./src/app/Components/video-canvas/video-canvas.component.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! angular-bootstrap-md */ "./node_modules/angular-bootstrap-md/esm5/angular-bootstrap-md.es5.js");
+/* harmony import */ var ngx_webcam__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-webcam */ "./node_modules/ngx-webcam/fesm5/ngx-webcam.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _Components_video_video_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/video/video.component */ "./src/app/Components/video/video.component.ts");
+/* harmony import */ var _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/canvas/canvas.component */ "./src/app/Components/canvas/canvas.component.ts");
+/* harmony import */ var _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/settings/settings.component */ "./src/app/Components/settings/settings.component.ts");
+/* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
+/* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
+/* harmony import */ var _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Components/video-canvas/video-canvas.component */ "./src/app/Components/video-canvas/video-canvas.component.ts");
+
 
 
 
@@ -1039,23 +1115,24 @@ var AppModule = /** @class */ (function () {
     AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"],
-                _Components_video_video_component__WEBPACK_IMPORTED_MODULE_7__["VideoComponent"],
-                _Components_spot_spot_component__WEBPACK_IMPORTED_MODULE_8__["SpotComponent"],
-                _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_9__["CanvasComponent"],
-                _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_10__["SettingsComponent"],
-                _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__["LensComponent"],
-                _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__["GlassesComponent"],
-                _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__["VideoCanvasComponent"],
+                _app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"],
+                _Components_video_video_component__WEBPACK_IMPORTED_MODULE_9__["VideoComponent"],
+                _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_10__["CanvasComponent"],
+                _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_11__["SettingsComponent"],
+                _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_12__["LensComponent"],
+                _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_13__["GlassesComponent"],
+                _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_14__["VideoCanvasComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-                angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_4__["MDBBootstrapModule"].forRoot(),
-                ngx_webcam__WEBPACK_IMPORTED_MODULE_5__["WebcamModule"],
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
+                angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MDBBootstrapModule"].forRoot(),
+                ngx_webcam__WEBPACK_IMPORTED_MODULE_7__["WebcamModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"]
             ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;

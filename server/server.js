@@ -4,10 +4,13 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config()
+const glasses = require('../server/Glasses');
+
 
 const app = express();
 
-const Glasses = require('./api/models/Glasses');
+// const Glasses = require('./api/models/Glasses');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,17 +34,9 @@ app.post('/glasses',
             })
     });
 
-app.get('/:glassesId',
-    (req, res, next) => {
-        const id = req.params.glassesId;
-        Glasses.findById(id).exec().then(doc => {
-            if(doc){
-                res.status(200).json(doc)
-            }
-        }).catch(err => {
-            console.log(err)
-            res.status(500).json({ error: err })
-        })
+app.get('/glasses', (req, res, next) => {
+    console.log(glasses)
+res.send(glasses);
     });
 
 

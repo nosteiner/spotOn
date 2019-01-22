@@ -1,7 +1,7 @@
 export class Settings {
     constructor() {
-        this.brightness = 0;
-        this.contrast = 0;
+        this.brightness = 100;
+        this.contrast = 100;
     }
 
     public brightness: number;

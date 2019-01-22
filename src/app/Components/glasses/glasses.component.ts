@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { GlassesService } from 'src/app/Services/glasses.service';
 
 @Component({
   selector: 'app-glasses',
@@ -7,14 +8,15 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class GlassesComponent implements OnInit {
 
-  constructor() { }
-  L = 'L';
-  R = 'R';
+  constructor(private glassesService: GlassesService) { }
+  L = false;
+  R = true;
 
   isActiveL = false;
   isActiveR = true;
 
   ngOnInit() {
+    console.log(this.glassesService.glasses);
   }
 
   @HostListener('document:keypress', ['$event'])
