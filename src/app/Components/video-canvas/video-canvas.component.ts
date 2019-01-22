@@ -9,7 +9,6 @@ export class VideoCanvasComponent implements OnInit {
 
   constructor() { }
 
-  isRight = true;
   ctx: CanvasRenderingContext2D;
   video: HTMLVideoElement;
   brightnessLevel = 0;

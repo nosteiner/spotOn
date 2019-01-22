@@ -8,15 +8,15 @@ import { Subject, Observable } from 'rxjs';
 })
 export class GlassesService {
 
-glasses: Glasses;
-glassesSbject: Subject<Glasses> = new Subject<Glasses>();
-glassesObservable: Observable<Glasses>;
+  glasses: Glasses;
+  glassesSbject: Subject<Glasses> = new Subject<Glasses>();
+  glassesObservable: Observable<Glasses>;
 
   constructor(private http: HttpClient) {
     this.glasses = new Glasses();
     // this.glassesObservable = this.glassesSbject.asObservable();
     // this.getGlasses();
-   }
+  }
 
   updateGlasses() {
     this.http.put<Glasses>(`/updateGlasses`, this.glasses).subscribe(() => {
@@ -34,7 +34,7 @@ glassesObservable: Observable<Glasses>;
   }
 
   getSpot(isRight, spotIndex) {
-    console.log(isRight)
+    console.log(isRight);
     return this.glasses.getSpot(isRight, spotIndex);
   }
 }

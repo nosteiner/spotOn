@@ -18,9 +18,8 @@ export class Glasses {
 
     getSpot(isRight, spotIndex) {
         const index = this.lenses.findIndex(lens => lens.isRight === isRight);
-        console.log(isRight)
+        console.log(isRight);
         return this.lenses[index].spots[spotIndex];
-
     }
 
     addToLensesArray(lens: Lens) {

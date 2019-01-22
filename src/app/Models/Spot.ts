@@ -5,13 +5,17 @@ export class Spot {
         this.yPos = y;
         this.width = 4;
         this.height = 2;
+        this.rotate = 0;
     }
     public xPos: number;
     public yPos: number;
     public width: number;
     public height: number;
+    public rotate: number;
 
-    rotate() {
+
+    rotateBy(value) {
+        this.rotate += value;
     }
 
     resize(newWidth, newHeight) {

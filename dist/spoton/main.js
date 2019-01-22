@@ -345,6 +345,7 @@ __webpack_require__.r(__webpack_exports__);
 var CanvasComponent = /** @class */ (function () {
     function CanvasComponent(glassesService) {
         this.glassesService = glassesService;
+        this.ang = 0;
     }
     CanvasComponent.prototype.ngOnInit = function () {
         this.spot = this.glassesService.getSpot(this.id, 0);
@@ -360,37 +361,68 @@ var CanvasComponent = /** @class */ (function () {
     };
     CanvasComponent.prototype.moveSpotOnKeyDown = function () {
         var _this = this;
-        var htmlCanvasElement = this.canvas.nativeElement;
         window.onkeydown = function (event) {
+            var htmlCanvasElement = _this.canvas.nativeElement;
+            _this.ctx.clearRect(0, 0, htmlCanvasElement.width, htmlCanvasElement.height);
+            // console.log(document.getElementById(this.id.toString()));
             var keyPr = event.keyCode;
-            var moveBy = 0.1;
-            var moveByInPixel = _this.mmToPixelOnWindose(moveBy);
-            var up = 40;
-            var down = 38;
-            var right = 39;
-            var left = 37;
-            if (keyPr === right && _this.spot.xPos < htmlCanvasElement.width) {
-                _this.spot.moveByX(moveByInPixel); // right arrow add 20 from current
-            }
-            else if (keyPr === left && _this.spot.xPos > 0) {
-                _this.spot.moveByX(-moveByInPixel); // left arrow subtract 20 from current
-            }
-            else if (keyPr === up && _this.spot.yPos < htmlCanvasElement.height) {
-                _this.spot.moveByY(moveByInPixel); // top arrow subtract 20 from current
-            }
-            else if (keyPr === down && _this.spot.yPos > 0) {
-                _this.spot.moveByY(-moveByInPixel); // bottom arrow add 20 from current
-            }
-            /*clearing anything drawn on canvas
-             *comment this below do draw path */
-            _this.ctx.clearRect(0, 0, 500, 500);
-            _this.glassesService.glasses.setSpotPos(_this.spot, 0, _this.id); /*hard coded 0 - as index of spot in the spots array*/
-            // Drawing rectangle at new position
-            _this.drawSpot(_this.spot.xPos, _this.spot.yPos, _this.spot.width, _this.spot.height);
+            _this.handleMove(keyPr, htmlCanvasElement);
+            _this.handleRotate(keyPr);
+            _this.rotate(0);
         };
+    };
+    CanvasComponent.prototype.handleRotate = function (keyPr) {
+        var A = 65;
+        var rotateInterval = 1;
+        if (keyPr === A) {
+            this.spot.rotateBy(rotateInterval);
+            this.rotate(rotateInterval);
+            console.log(this.spot);
+        }
+    };
+    CanvasComponent.prototype.handleMove = function (keyPr, htmlCanvasElement) {
+        var moveInterval = 0.1;
+        var moveIntervalInPixel = this.mmToPixelOnWindose(moveInterval);
+        var up = 40;
+        var down = 38;
+        var right = 39;
+        var left = 37;
+        if (keyPr === right && this.spot.xPos < htmlCanvasElement.width) {
+            this.spot.moveByX(moveIntervalInPixel); // right arrow add 20 from current
+        }
+        else if (keyPr === left && this.spot.xPos > 0) {
+            this.spot.moveByX(-moveIntervalInPixel); // left arrow subtract 20 from current
+        }
+        else if (keyPr === up && this.spot.yPos < htmlCanvasElement.height) {
+            this.spot.moveByY(moveIntervalInPixel); // top arrow subtract 20 from current
+        }
+        else if (keyPr === down && this.spot.yPos > 0) {
+            this.spot.moveByY(-moveIntervalInPixel); // bottom arrow add 20 from current
+        }
+        this.glassesService.glasses.setSpotPos(this.spot, 0, this.id); /*hard coded 0 - as index of spot in the spots array*/
+        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height); // Drawing rectangle at new position
     };
     CanvasComponent.prototype.mmToPixelOnWindose = function (mm) {
         return 3.7795275591 * mm;
+    };
+    CanvasComponent.prototype.degToRad = function (deg) {
+        return deg * Math.PI / 180;
+    };
+    CanvasComponent.prototype.rotate = function (rotateBy) {
+        var htmlCanvasElement = this.canvas.nativeElement;
+        var canvasWidth = htmlCanvasElement.width;
+        var canvasHeigth = htmlCanvasElement.height;
+        var iw = this.spot.width;
+        var ih = this.spot.height;
+        var xpos = this.spot.xPos;
+        var ypos = this.spot.yPos;
+        this.ctx.save(); /*saves the state of canvas*/
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeigth); /*clear the canvas*/
+        this.ctx.translate(xpos, ypos); /*let's translate*/
+        this.ctx.rotate(Math.PI / 180 * (this.spot.rotate += rotateBy)); /*increment the angle and rotate the image*/
+        this.ctx.translate(-(canvasWidth / 2) + iw / 2, -(canvasHeigth / 2) - ih / 2); /*let's translate*/
+        this.ctx.fillRect(canvasWidth / 2 - iw / 2, canvasHeigth / 2 - ih / 2, iw, ih); /*draw the image ;)*/
+        this.ctx.restore(); /*restore the state of canvas*/
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -503,7 +535,7 @@ var GlassesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<app-video-canvas></app-video-canvas>\n"
+module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<!-- <app-video-canvas></app-video-canvas> -->\n"
 
 /***/ }),
 
@@ -626,7 +658,7 @@ var SettingsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n<label for=\"brightnessRange\">brightness</label>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n<label for=\"contrastRange\">contrast</label>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
+module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n\n<label for=\"brightnessRange\">brightness</label>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n<label for=\"contrastRange\">contrast</label>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
 
 /***/ }),
 
@@ -657,7 +689,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var VideoCanvasComponent = /** @class */ (function () {
     function VideoCanvasComponent() {
-        this.isRight = true;
         this.brightnessLevel = 0;
         this.contrastLevel = 0;
     }
@@ -903,8 +934,10 @@ var Spot = /** @class */ (function () {
         this.yPos = y;
         this.width = 4;
         this.height = 2;
+        this.rotate = 0;
     }
-    Spot.prototype.rotate = function () {
+    Spot.prototype.rotateBy = function (value) {
+        this.rotate += value;
     };
     Spot.prototype.resize = function (newWidth, newHeight) {
         this.width = newWidth;
