@@ -348,12 +348,16 @@ var CanvasComponent = /** @class */ (function () {
         this.ang = 0;
     }
     CanvasComponent.prototype.ngOnInit = function () {
-        this.spot = this.glassesService.getSpot(this.id, 0);
-        this.initCanvas();
+        var _this = this;
+        this.glassesService.glassesSubject.subscribe(function (glasses) {
+            _this.spot = _this.glassesService.getSpot(_this.id, 0);
+            _this.initCanvas();
+        });
+        this.glassesService.getGlasses(this.glassesService.id);
     };
     CanvasComponent.prototype.initCanvas = function () {
         this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
+        this.rotate(0); // to draw the rotated spot for the first time
         this.handleKeyDown();
     };
     CanvasComponent.prototype.drawSpot = function (x, y, width, height) {
@@ -363,15 +367,13 @@ var CanvasComponent = /** @class */ (function () {
     CanvasComponent.prototype.handleKeyDown = function () {
         var _this = this;
         window.onkeydown = function (event) {
-            console.log(event);
-            console.log(_this.canvas.nativeElement);
             var htmlCanvasElement = _this.canvas.nativeElement;
             _this.ctx.clearRect(0, 0, htmlCanvasElement.width, htmlCanvasElement.height);
-            console.log(document.getElementById(_this.id.toString()));
             var keyPr = event.keyCode;
             _this.handleMove(keyPr, htmlCanvasElement);
             _this.handleRotate(keyPr);
-            _this.glassesService.updateGlasses();
+            _this.glassesService.glasses.setSpot(_this.spot, 0, _this.id); /*hard coded 0 - as index of spot in the spots array*/
+            _this.glassesService.updateGlasses(_this.glassesService.id);
         };
     };
     CanvasComponent.prototype.handleRotate = function (keyPr) {
@@ -407,7 +409,6 @@ var CanvasComponent = /** @class */ (function () {
         else if (keyPr === down && this.spot.yPos > 0) {
             this.spot.moveByY(-moveIntervalInPixel); // bottom arrow add 20 from current
         }
-        this.glassesService.glasses.setSpotPos(this.spot, 0, this.id); /*hard coded 0 - as index of spot in the spots array*/
         this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height); // Drawing rectangle at new position
     };
     CanvasComponent.prototype.mmToPixelOnWindose = function (mm) {
@@ -506,8 +507,6 @@ var GlassesComponent = /** @class */ (function () {
         this.isActiveR = true;
     }
     GlassesComponent.prototype.ngOnInit = function () {
-        // this.glassesService.postGlasses();
-        this.glassesService.getGlasses();
     };
     GlassesComponent.prototype.handleKeyboardEvent = function (event) {
         var keyPr = event.keyCode;
@@ -713,9 +712,18 @@ var VideoCanvasComponent = /** @class */ (function () {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
         this.video.addEventListener('play', function () {
             window.setInterval(function () {
-                _this.ctx.drawImage(_this.video, 5, 5, 260, 125);
+                // this.ctx.drawImage(this.video, 5, 5, 260, 125);
+                _this.fitVideoToCanvas();
             }, 20);
         }, false);
+    };
+    VideoCanvasComponent.prototype.fitVideoToCanvas = function () {
+        var htmlCanvasElement = this.videoCanvas.nativeElement;
+        var vRatio = (htmlCanvasElement.height / this.video.videoHeight) * this.video.videoWidth;
+        this.ctx.drawImage(this.video, 0, 0, vRatio, htmlCanvasElement.height);
+        // fill horizontally
+        var hRatio = (htmlCanvasElement.width / this.video.videoWidth) * this.video.videoHeight;
+        this.ctx.drawImage(this.video, 0, 0, htmlCanvasElement.width, hRatio);
     };
     VideoCanvasComponent.prototype.changeBrightness = function (value) {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
@@ -849,14 +857,12 @@ var Glasses = /** @class */ (function () {
         this.addToLensesArray(new _Lens__WEBPACK_IMPORTED_MODULE_0__["Lens"](true));
         this.addToLensesArray(new _Lens__WEBPACK_IMPORTED_MODULE_0__["Lens"](false));
     }
-    Glasses.prototype.setSpotPos = function (spot, spotIndex, isRight) {
-        console.log(spot, spotIndex, isRight);
+    Glasses.prototype.setSpot = function (spot, spotIndex, isRight) {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
         this.lenses[index].spots[spotIndex] = spot;
     };
     Glasses.prototype.getSpot = function (isRight, spotIndex) {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
-        console.log(isRight);
         return this.lenses[index].spots[spotIndex];
     };
     Glasses.prototype.addToLensesArray = function (lens) {
@@ -979,6 +985,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Models/Glasses */ "./src/app/Models/Glasses.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
 
 
 
@@ -986,20 +994,23 @@ __webpack_require__.r(__webpack_exports__);
 var GlassesService = /** @class */ (function () {
     function GlassesService(http) {
         this.http = http;
+        this.id = '5c48517c4533aa48a09504d7';
+        this.glassesSubject = new rxjs__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
         this.glasses = new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]();
+        this.glassesSubject.asObservable();
     }
-    GlassesService.prototype.updateGlasses = function () {
-        this.http.put("/updateGlasses/5c48517c4533aa48a09504d7", this.glasses).subscribe(function (data) {
+    GlassesService.prototype.updateGlasses = function (id) {
+        this.http.put("/updateGlasses/" + id, this.glasses).subscribe(function (data) {
         });
     };
-    GlassesService.prototype.getGlasses = function () {
+    GlassesService.prototype.getGlasses = function (id) {
         var _this = this;
-        this.http.get('/glasses/5c48517c4533aa48a09504d7').subscribe(function (data) {
+        this.http.get("/glasses/" + id).subscribe(function (data) {
             _this.glasses = _this.deepCopy(data, new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]());
+            _this.glassesSubject.next(_this.glasses);
         });
     };
     GlassesService.prototype.getSpot = function (isRight, spotIndex) {
-        console.log(isRight);
         return this.glasses.getSpot(isRight, spotIndex);
     };
     GlassesService.prototype.deepCopy = function (newObj, oldObj) {

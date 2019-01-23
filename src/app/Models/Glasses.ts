@@ -12,15 +12,13 @@ export class Glasses {
     private _id: String;
     public lenses: Array<Lens>;
 
-    setSpotPos(spot: Spot, spotIndex, isRight) {
-        console.log(spot, spotIndex, isRight);
+    setSpot(spot: Spot, spotIndex, isRight) {
         const index = this.lenses.findIndex(lens => lens.isRight === isRight);
         this.lenses[index].spots[spotIndex] = spot;
     }
 
     getSpot(isRight, spotIndex) {
         const index = this.lenses.findIndex(lens => lens.isRight === isRight);
-        console.log(isRight);
         return this.lenses[index].spots[spotIndex];
     }
 

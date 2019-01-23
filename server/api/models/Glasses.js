@@ -23,10 +23,4 @@ const glassesSchema = mongoose.Schema({
     lenses: [lensSchema]
 });
 
-
-
-
-
-
-
 module.exports = mongoose.model('Glasses', glassesSchema, 'glasses')

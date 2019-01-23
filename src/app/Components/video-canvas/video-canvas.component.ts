@@ -31,9 +31,20 @@ export class VideoCanvasComponent implements OnInit {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
     this.video.addEventListener('play', () => {
       window.setInterval(() => {
-        this.ctx.drawImage(this.video, 5, 5, 260, 125);
+        // this.ctx.drawImage(this.video, 5, 5, 260, 125);
+        this.fitVideoToCanvas();
       }, 20);
     }, false);
+  }
+
+  fitVideoToCanvas() {
+    const htmlCanvasElement = this.videoCanvas.nativeElement as HTMLCanvasElement;
+    const vRatio = (htmlCanvasElement.height / this.video.videoHeight) * this.video.videoWidth;
+    this.ctx.drawImage(this.video, 0, 0, vRatio, htmlCanvasElement.height);
+
+    // fill horizontally
+    const hRatio = (htmlCanvasElement.width / this.video.videoWidth) * this.video.videoHeight;
+    this.ctx.drawImage(this.video, 0, 0, htmlCanvasElement.width, hRatio);
   }
 
   changeBrightness(value) {

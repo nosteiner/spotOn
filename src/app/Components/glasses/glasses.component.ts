@@ -16,8 +16,6 @@ export class GlassesComponent implements OnInit {
   isActiveR = true;
 
   ngOnInit() {
-    // this.glassesService.postGlasses();
-    this.glassesService.getGlasses();
 
   }
 

@@ -8,32 +8,37 @@ import { Subject, Observable } from 'rxjs';
 })
 export class GlassesService {
 
+  id = '5c48517c4533aa48a09504d7';
+
   glasses: Glasses;
+  glssesObservable: Observable<Glasses>;
+  glassesSubject: Subject<Glasses> = new Subject<Glasses>();
+
 
   constructor(private http: HttpClient) {
     this.glasses = new Glasses();
-
+    this.glassesSubject.asObservable();
   }
 
 
-  updateGlasses() {
-    this.http.put<Glasses>(`/updateGlasses/5c48517c4533aa48a09504d7`, this.glasses).subscribe((data) => {
+  updateGlasses(id) {
+    this.http.put<Glasses>(`/updateGlasses/${id}`, this.glasses).subscribe((data) => {
     });
   }
-  
-  getGlasses() {
-    this.http.get<Glasses>('/glasses/5c48517c4533aa48a09504d7').subscribe((data) => {
+
+  getGlasses(id) {
+    this.http.get<Glasses>(`/glasses/${id}`).subscribe((data) => {
       this.glasses = this.deepCopy(data, new Glasses());
+      this.glassesSubject.next(this.glasses);
     });
   }
 
   getSpot(isRight, spotIndex) {
-    console.log(isRight);
     return this.glasses.getSpot(isRight, spotIndex);
   }
 
   deepCopy(newObj, oldObj) {
-  for (let key in newObj) {
+  for (const key in newObj) {
     if (typeof newObj[key] === 'object') {
      oldObj[key] = this.deepCopy(newObj[key], oldObj[key]);
     } else {
