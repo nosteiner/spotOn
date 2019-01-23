@@ -36,6 +36,9 @@ export class GlassesService {
   getSpot(isRight, spotIndex) {
     return this.glasses.getSpot(isRight, spotIndex);
   }
+  getSettings(isRight) {
+    return this.glasses.getSettings(isRight);
+  }
 
   deepCopy(newObj, oldObj) {
   for (const key in newObj) {

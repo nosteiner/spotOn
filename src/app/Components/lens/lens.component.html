@@ -1,5 +1,16 @@
 
 <app-canvas [id]="side" [isActive]="isActive"></app-canvas>
-<app-video-canvas [id]="side"></app-video-canvas>
+<app-video-canvas [brightnessValue]="brightnessValue" [contrastValue]="contrastValue" [id]="side"></app-video-canvas>
 
 
+<div class="row">
+    <div class="col-6">
+            <label for="brightnessRange">brightness</label>
+            <input id="brightnessRange" type="range" min="0" max="200" #brightness (change)="changeBrightness(brightness.value)" value=100>
+    </div>
+    <div class="col-6">
+            <label for="contrastRange">contrast</label>
+            <input id="contrastRange" type="range" min="0" max="200" #contrast (change)="changeContrast(contrast.value)" value=100>
+    </div>
+        
+</div>

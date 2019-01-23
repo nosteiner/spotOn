@@ -1,25 +1,41 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import { GlassesService } from 'src/app/Services/glasses.service';
+import { Settings } from 'src/app/Models/Settings';
 
 @Component({
   selector: 'app-video-canvas',
   templateUrl: './video-canvas.component.html',
   styleUrls: ['./video-canvas.component.scss']
 })
-export class VideoCanvasComponent implements OnInit {
+export class VideoCanvasComponent implements OnInit, OnChanges {
 
-  constructor() { }
+  constructor(private glassesService: GlassesService) { }
 
+  settings: Settings;
   ctx: CanvasRenderingContext2D;
   video: HTMLVideoElement;
-  brightnessLevel = 0;
-  contrastLevel = 0;
 
+  @Input() brightnessValue;
+  @Input() contrastValue;
   @Input() id: boolean;
 
   @ViewChild('videoCanvas') videoCanvas: ElementRef;
 
   ngOnInit() {
-    this.initCanvas();
+    this.glassesService.glassesSubject.subscribe((glasses) => {
+      this.settings = this.glassesService.getSettings(this.id);
+      this.initCanvas();
+    });
+    this.glassesService.getGlasses(this.glassesService.id);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes.contrastValue) {
+      this.changeContrast(changes.contrastValue.currentValue);
+    } else if (changes.brightnessValue) {
+      this.changeBrightness(changes.brightnessValue.currentValue);
+    }
   }
 
   initCanvas() {
@@ -31,7 +47,6 @@ export class VideoCanvasComponent implements OnInit {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
     this.video.addEventListener('play', () => {
       window.setInterval(() => {
-        // this.ctx.drawImage(this.video, 5, 5, 260, 125);
         this.fitVideoToCanvas();
       }, 20);
     }, false);
@@ -49,14 +64,19 @@ export class VideoCanvasComponent implements OnInit {
 
   changeBrightness(value) {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
-    this.brightnessLevel = value / 100;
-    return this.ctx.filter = `brightness(${this.brightnessLevel})`;
+    this.brightnessValue = value / 100.0;
+    this.settings.set(this.brightnessValue, this.contrastValue);
+    this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+    this.glassesService.updateGlasses(this.glassesService.id);
+    return this.ctx.filter = `brightness(${this.brightnessValue})`;
   }
 
   changeContrast(value) {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
-    this.contrastLevel = value;
-    return this.ctx.filter = `contrast(${this.contrastLevel})`;
+    this.contrastValue = value / 100.0;
+    this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+    this.glassesService.updateGlasses(this.glassesService.id);
+    return this.ctx.filter = `contrast(${this.contrastValue})`;
   }
 }
 

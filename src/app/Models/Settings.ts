@@ -8,6 +8,7 @@ export class Settings {
     public contrast: number;
 
     set(brightness, contrast) {
-
+        this.brightness = brightness;
+        this.contrast = contrast;
     }
 }

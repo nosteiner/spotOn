@@ -467,7 +467,7 @@ var CanvasComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n    <div class=\"col-6\">\n        <app-lens [side]='L' [isActive]='isActiveL'></app-lens>\n    </div>\n    <div class=\"col-6\">\n        <app-lens [side]='R' [isActive]='isActiveR'></app-lens>\n    </div>\n</div>"
+module.exports = "<div class=\"row\">\n    <div class=\"col-1\"></div>\n    <div class=\"col-5\">\n        <app-lens [side]='L' [isActive]='isActiveL'></app-lens>\n    </div>\n    <div class=\"col-5\">\n        <app-lens [side]='R' [isActive]='isActiveR'></app-lens>\n    </div>\n    <div class=\"col-1\"></div>\n</div>"
 
 /***/ }),
 
@@ -543,7 +543,7 @@ var GlassesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<app-video-canvas [id]=\"side\"></app-video-canvas>\n\n\n"
+module.exports = "\n<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<app-video-canvas [brightnessValue]=\"brightnessValue\" [contrastValue]=\"contrastValue\" [id]=\"side\"></app-video-canvas>\n\n\n<div class=\"row\">\n    <div class=\"col-6\">\n            <label for=\"brightnessRange\">brightness</label>\n            <input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n    </div>\n    <div class=\"col-6\">\n            <label for=\"contrastRange\">contrast</label>\n            <input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"200\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n    </div>\n        \n</div>"
 
 /***/ }),
 
@@ -554,7 +554,7 @@ module.exports = "\n<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canv
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "app-canvas {\n  position: absolute;\n  height: 100%;\n  width: 100%; }\n\napp-video-canvas {\n  height: 100%;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNDLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVyxFQUFBOztBQUVaO0VBQ0MsWUFBWTtFQUNaLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbmFwcC1jYW52YXMgeyBcclxuXHRwb3NpdGlvbjogYWJzb2x1dGU7IFxyXG5cdGhlaWdodDogMTAwJTsgXHJcblx0d2lkdGg6IDEwMCU7IFxyXG59IFxyXG5hcHAtdmlkZW8tY2FudmFzIHsgXHJcblx0aGVpZ2h0OiAxMDAlOyBcclxuXHR3aWR0aDogMTAwJTsgXHJcbn0gXHJcblx0XHRcdFxyXG5cclxuIl19 */"
+module.exports = "app-canvas {\n  position: absolute;\n  height: 100%;\n  width: 100%; }\n\napp-video-canvas {\n  height: 100%;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNDLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVyxFQUFBOztBQUVaO0VBQ0MsWUFBWTtFQUNaLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbmFwcC1jYW52YXMgeyBcclxuXHRwb3NpdGlvbjogYWJzb2x1dGU7XHJcblx0aGVpZ2h0OiAxMDAlOyBcclxuXHR3aWR0aDogMTAwJTsgIFxyXG59IFxyXG5hcHAtdmlkZW8tY2FudmFzIHsgXHJcblx0aGVpZ2h0OiAxMDAlOyBcclxuXHR3aWR0aDogMTAwJTsgXHJcbn0gXHJcblx0XHRcdFxyXG5cclxuIl19 */"
 
 /***/ }),
 
@@ -570,12 +570,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LensComponent", function() { return LensComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/Services/glasses.service */ "./src/app/Services/glasses.service.ts");
+
 
 
 var LensComponent = /** @class */ (function () {
-    function LensComponent() {
+    function LensComponent(glassesService) {
+        this.glassesService = glassesService;
+        this.brightnessValue = 100;
+        this.contrastValue = 100;
     }
     LensComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.glassesService.glassesSubject.subscribe(function (glasses) {
+            _this.settings = _this.glassesService.getSettings(_this.side);
+            _this.brightnessValue = _this.settings.brightness;
+            _this.contrastValue = _this.settings.contrast;
+        });
+    };
+    LensComponent.prototype.changeContrast = function (value) {
+        this.contrastValue = Number(value);
+    };
+    LensComponent.prototype.changeBrightness = function (value) {
+        this.brightnessValue = Number(value);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -591,68 +608,9 @@ var LensComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./lens.component.html */ "./src/app/Components/lens/lens.component.html"),
             styles: [__webpack_require__(/*! ./lens.component.scss */ "./src/app/Components/lens/lens.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__["GlassesService"]])
     ], LensComponent);
     return LensComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/Components/settings/settings.component.html":
-/*!*************************************************************!*\
-  !*** ./src/app/Components/settings/settings.component.html ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\"  [(ngModel)]=\"brightnessLevel\" value=100>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\"  [(ngModel)]=\"contrastLevel\" value=100>\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/Components/settings/settings.component.scss":
-/*!*************************************************************!*\
-  !*** ./src/app/Components/settings/settings.component.scss ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvc2V0dGluZ3Mvc2V0dGluZ3MuY29tcG9uZW50LnNjc3MifQ== */"
-
-/***/ }),
-
-/***/ "./src/app/Components/settings/settings.component.ts":
-/*!***********************************************************!*\
-  !*** ./src/app/Components/settings/settings.component.ts ***!
-  \***********************************************************/
-/*! exports provided: SettingsComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SettingsComponent", function() { return SettingsComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-
-
-var SettingsComponent = /** @class */ (function () {
-    function SettingsComponent() {
-    }
-    SettingsComponent.prototype.ngOnInit = function () {
-    };
-    SettingsComponent.prototype.changeBrightness = function (value) {
-        console.log(value);
-    };
-    SettingsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-settings',
-            template: __webpack_require__(/*! ./settings.component.html */ "./src/app/Components/settings/settings.component.html"),
-            styles: [__webpack_require__(/*! ./settings.component.scss */ "./src/app/Components/settings/settings.component.scss")]
-        }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
-    ], SettingsComponent);
-    return SettingsComponent;
 }());
 
 
@@ -666,7 +624,7 @@ var SettingsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id=\"{{this.id}}\" #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n\n<div class=\"row\">\n    <label for=\"brightnessRange\">brightness</label>\n    <input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\"\n        value=100>\n    <label for=\"contrastRange\">contrast</label>\n    <input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"200\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n</div>"
+module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9cm;\" id=\"{{this.id}}\" #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n\n\n"
 
 /***/ }),
 
@@ -693,15 +651,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VideoCanvasComponent", function() { return VideoCanvasComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/Services/glasses.service */ "./src/app/Services/glasses.service.ts");
+
 
 
 var VideoCanvasComponent = /** @class */ (function () {
-    function VideoCanvasComponent() {
-        this.brightnessLevel = 0;
-        this.contrastLevel = 0;
+    function VideoCanvasComponent(glassesService) {
+        this.glassesService = glassesService;
     }
     VideoCanvasComponent.prototype.ngOnInit = function () {
-        this.initCanvas();
+        var _this = this;
+        this.glassesService.glassesSubject.subscribe(function (glasses) {
+            _this.settings = _this.glassesService.getSettings(_this.id);
+            _this.initCanvas();
+        });
+        this.glassesService.getGlasses(this.glassesService.id);
+    };
+    VideoCanvasComponent.prototype.ngOnChanges = function (changes) {
+        if (changes.contrastValue) {
+            this.changeContrast(changes.contrastValue.currentValue);
+        }
+        else if (changes.brightnessValue) {
+            this.changeBrightness(changes.brightnessValue.currentValue);
+        }
     };
     VideoCanvasComponent.prototype.initCanvas = function () {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
@@ -712,7 +684,6 @@ var VideoCanvasComponent = /** @class */ (function () {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
         this.video.addEventListener('play', function () {
             window.setInterval(function () {
-                // this.ctx.drawImage(this.video, 5, 5, 260, 125);
                 _this.fitVideoToCanvas();
             }, 20);
         }, false);
@@ -727,14 +698,27 @@ var VideoCanvasComponent = /** @class */ (function () {
     };
     VideoCanvasComponent.prototype.changeBrightness = function (value) {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
-        this.brightnessLevel = value / 100;
-        return this.ctx.filter = "brightness(" + this.brightnessLevel + ")";
+        this.brightnessValue = value / 100.0;
+        this.settings.set(this.brightnessValue, this.contrastValue);
+        this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+        this.glassesService.updateGlasses(this.glassesService.id);
+        return this.ctx.filter = "brightness(" + this.brightnessValue + ")";
     };
     VideoCanvasComponent.prototype.changeContrast = function (value) {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
-        this.contrastLevel = value;
-        return this.ctx.filter = "contrast(" + this.contrastLevel + ")";
+        this.contrastValue = value / 100.0;
+        this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+        this.glassesService.updateGlasses(this.glassesService.id);
+        return this.ctx.filter = "contrast(" + this.contrastValue + ")";
     };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], VideoCanvasComponent.prototype, "brightnessValue", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], VideoCanvasComponent.prototype, "contrastValue", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
@@ -749,7 +733,7 @@ var VideoCanvasComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./video-canvas.component.html */ "./src/app/Components/video-canvas/video-canvas.component.html"),
             styles: [__webpack_require__(/*! ./video-canvas.component.scss */ "./src/app/Components/video-canvas/video-canvas.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_Services_glasses_service__WEBPACK_IMPORTED_MODULE_2__["GlassesService"]])
     ], VideoCanvasComponent);
     return VideoCanvasComponent;
 }());
@@ -861,6 +845,14 @@ var Glasses = /** @class */ (function () {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
         this.lenses[index].spots[spotIndex] = spot;
     };
+    Glasses.prototype.setSettings = function (settings, isRight) {
+        var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
+        this.lenses[index].settings = settings;
+    };
+    Glasses.prototype.getSettings = function (isRight) {
+        var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
+        return this.lenses[index].settings;
+    };
     Glasses.prototype.getSpot = function (isRight, spotIndex) {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
         return this.lenses[index].spots[spotIndex];
@@ -925,6 +917,8 @@ var Settings = /** @class */ (function () {
         this.contrast = 100;
     }
     Settings.prototype.set = function (brightness, contrast) {
+        this.brightness = brightness;
+        this.contrast = contrast;
     };
     return Settings;
 }());
@@ -1012,6 +1006,9 @@ var GlassesService = /** @class */ (function () {
     };
     GlassesService.prototype.getSpot = function (isRight, spotIndex) {
         return this.glasses.getSpot(isRight, spotIndex);
+    };
+    GlassesService.prototype.getSettings = function (isRight) {
+        return this.glasses.getSettings(isRight);
     };
     GlassesService.prototype.deepCopy = function (newObj, oldObj) {
         for (var key in newObj) {
@@ -1145,11 +1142,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _Components_video_video_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/video/video.component */ "./src/app/Components/video/video.component.ts");
 /* harmony import */ var _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/canvas/canvas.component */ "./src/app/Components/canvas/canvas.component.ts");
-/* harmony import */ var _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/settings/settings.component */ "./src/app/Components/settings/settings.component.ts");
-/* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
-/* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
-/* harmony import */ var _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Components/video-canvas/video-canvas.component */ "./src/app/Components/video-canvas/video-canvas.component.ts");
-
+/* harmony import */ var _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Components/lens/lens.component */ "./src/app/Components/lens/lens.component.ts");
+/* harmony import */ var _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Components/glasses/glasses.component */ "./src/app/Components/glasses/glasses.component.ts");
+/* harmony import */ var _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Components/video-canvas/video-canvas.component */ "./src/app/Components/video-canvas/video-canvas.component.ts");
 
 
 
@@ -1173,10 +1168,9 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"],
                 _Components_video_video_component__WEBPACK_IMPORTED_MODULE_9__["VideoComponent"],
                 _Components_canvas_canvas_component__WEBPACK_IMPORTED_MODULE_10__["CanvasComponent"],
-                _Components_settings_settings_component__WEBPACK_IMPORTED_MODULE_11__["SettingsComponent"],
-                _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_12__["LensComponent"],
-                _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_13__["GlassesComponent"],
-                _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_14__["VideoCanvasComponent"],
+                _Components_lens_lens_component__WEBPACK_IMPORTED_MODULE_11__["LensComponent"],
+                _Components_glasses_glasses_component__WEBPACK_IMPORTED_MODULE_12__["GlassesComponent"],
+                _Components_video_canvas_video_canvas_component__WEBPACK_IMPORTED_MODULE_13__["VideoCanvasComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
