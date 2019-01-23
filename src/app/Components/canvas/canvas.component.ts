@@ -23,6 +23,7 @@ export class CanvasComponent implements OnInit {
 
   ngOnInit() {
     this.glassesService.glassesSubject.subscribe((glasses) => {
+      console.log(glasses)
       this.spot = this.glassesService.getSpot(this.id, 0);
       this.initCanvas();
     });

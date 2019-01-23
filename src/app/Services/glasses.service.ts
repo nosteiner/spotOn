@@ -29,6 +29,7 @@ export class GlassesService {
   getGlasses(id) {
     this.http.get<Glasses>(`/glasses/${id}`).subscribe((data) => {
       this.glasses = this.deepCopy(data, new Glasses());
+      console.log(data)
       this.glassesSubject.next(this.glasses);
     });
   }

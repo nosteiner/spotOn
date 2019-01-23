@@ -66,16 +66,16 @@ export class VideoCanvasComponent implements OnInit, OnChanges {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
     this.brightnessValue = value / 100.0;
     this.settings.set(this.brightnessValue, this.contrastValue);
-    this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
-    this.glassesService.updateGlasses(this.glassesService.id);
+    // this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+    // this.glassesService.updateGlasses(this.glassesService.id);
     return this.ctx.filter = `brightness(${this.brightnessValue})`;
   }
 
   changeContrast(value) {
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
     this.contrastValue = value / 100.0;
-    this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
-    this.glassesService.updateGlasses(this.glassesService.id);
+    // this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+    // this.glassesService.updateGlasses(this.glassesService.id);
     return this.ctx.filter = `contrast(${this.contrastValue})`;
   }
 }

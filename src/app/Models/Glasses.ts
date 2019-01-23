@@ -23,7 +23,7 @@ export class Glasses {
         this.lenses[index].settings = settings;
     }
 
-    getSettings(isRight){
+    getSettings(isRight) {
         const index = this.lenses.findIndex(lens => lens.isRight === isRight);
         return this.lenses[index].settings;
     }

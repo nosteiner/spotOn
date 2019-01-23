@@ -350,6 +350,7 @@ var CanvasComponent = /** @class */ (function () {
     CanvasComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.glassesService.glassesSubject.subscribe(function (glasses) {
+            console.log(glasses);
             _this.spot = _this.glassesService.getSpot(_this.id, 0);
             _this.initCanvas();
         });
@@ -700,15 +701,15 @@ var VideoCanvasComponent = /** @class */ (function () {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
         this.brightnessValue = value / 100.0;
         this.settings.set(this.brightnessValue, this.contrastValue);
-        this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
-        this.glassesService.updateGlasses(this.glassesService.id);
+        // this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+        // this.glassesService.updateGlasses(this.glassesService.id);
         return this.ctx.filter = "brightness(" + this.brightnessValue + ")";
     };
     VideoCanvasComponent.prototype.changeContrast = function (value) {
         this.ctx = this.videoCanvas.nativeElement.getContext('2d');
         this.contrastValue = value / 100.0;
-        this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
-        this.glassesService.updateGlasses(this.glassesService.id);
+        // this.glassesService.glasses.setSettings(this.settings, this.id); /*hard coded 0 - as index of spot in the spots array*/
+        // this.glassesService.updateGlasses(this.glassesService.id);
         return this.ctx.filter = "contrast(" + this.contrastValue + ")";
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1001,6 +1002,7 @@ var GlassesService = /** @class */ (function () {
         var _this = this;
         this.http.get("/glasses/" + id).subscribe(function (data) {
             _this.glasses = _this.deepCopy(data, new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]());
+            console.log(data);
             _this.glassesSubject.next(_this.glasses);
         });
     };

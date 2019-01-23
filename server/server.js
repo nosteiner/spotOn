@@ -40,8 +40,8 @@ app.get('/glasses/:id', (req, res, next) => {
 });
 
 app.put(`/updateGlasses/:id`, (req, res, next) => {
-    let query = { '_id': req.params.id };
 
+    let query = { '_id': req.params.id };
     Glasses.findOneAndUpdate(query, req.body, function (err, doc) {
         if (err) { return res.send({ error: err }); 
      } else {
