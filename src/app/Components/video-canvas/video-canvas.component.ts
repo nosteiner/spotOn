@@ -14,9 +14,9 @@ export class VideoCanvasComponent implements OnInit {
   brightnessLevel = 0;
   contrastLevel = 0;
 
-  @Input() id: string;
-  @ViewChild('videoCanvas') videoCanvas: ElementRef;
+  @Input() id: boolean;
 
+  @ViewChild('videoCanvas') videoCanvas: ElementRef;
 
   ngOnInit() {
     this.initCanvas();
@@ -37,7 +37,6 @@ export class VideoCanvasComponent implements OnInit {
   }
 
   changeBrightness(value) {
-
     this.ctx = this.videoCanvas.nativeElement.getContext('2d');
     this.brightnessLevel = value / 100;
     return this.ctx.filter = `brightness(${this.brightnessLevel})`;

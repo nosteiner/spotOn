@@ -7,12 +7,12 @@ export class Spot {
         this.height = 2;
         this.rotate = 0;
     }
+
     public xPos: number;
     public yPos: number;
     public width: number;
     public height: number;
     public rotate: number;
-
 
     rotateBy(value) {
         this.rotate += value;

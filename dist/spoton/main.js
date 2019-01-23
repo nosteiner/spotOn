@@ -311,7 +311,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "    <canvas class=\"canvas\" style=\"width: 16cm; height: 9cm;\" id='{{id}}' #canvas></canvas>\n"
+module.exports = "    <canvas class=\"canvas\" style=\"width: 16cm; height: 9cm;\" #canvas></canvas>\n"
 
 /***/ }),
 
@@ -354,31 +354,38 @@ var CanvasComponent = /** @class */ (function () {
     CanvasComponent.prototype.initCanvas = function () {
         this.ctx = this.canvas.nativeElement.getContext('2d');
         this.drawSpot(this.spot.xPos, this.spot.yPos, this.spot.width, this.spot.height);
-        this.moveSpotOnKeyDown();
+        this.handleKeyDown();
     };
     CanvasComponent.prototype.drawSpot = function (x, y, width, height) {
+        this.ctx.fillStyle = '#FF0000';
         this.ctx.fillRect(x, y, width, height);
     };
-    CanvasComponent.prototype.moveSpotOnKeyDown = function () {
+    CanvasComponent.prototype.handleKeyDown = function () {
         var _this = this;
         window.onkeydown = function (event) {
+            console.log(event);
+            console.log(_this.canvas.nativeElement);
             var htmlCanvasElement = _this.canvas.nativeElement;
             _this.ctx.clearRect(0, 0, htmlCanvasElement.width, htmlCanvasElement.height);
-            // console.log(document.getElementById(this.id.toString()));
+            console.log(document.getElementById(_this.id.toString()));
             var keyPr = event.keyCode;
             _this.handleMove(keyPr, htmlCanvasElement);
             _this.handleRotate(keyPr);
-            _this.rotate(0);
         };
     };
     CanvasComponent.prototype.handleRotate = function (keyPr) {
         var A = 65;
+        var D = 68;
         var rotateInterval = 1;
         if (keyPr === A) {
             this.spot.rotateBy(rotateInterval);
             this.rotate(rotateInterval);
-            console.log(this.spot);
         }
+        else if (keyPr === D) {
+            this.spot.rotateBy(-rotateInterval);
+            this.rotate(-rotateInterval);
+        }
+        this.rotate(0);
     };
     CanvasComponent.prototype.handleMove = function (keyPr, htmlCanvasElement) {
         var moveInterval = 0.1;
@@ -408,25 +415,25 @@ var CanvasComponent = /** @class */ (function () {
     CanvasComponent.prototype.degToRad = function (deg) {
         return deg * Math.PI / 180;
     };
-    CanvasComponent.prototype.rotate = function (rotateBy) {
+    CanvasComponent.prototype.rotate = function (rotateInterval) {
         var htmlCanvasElement = this.canvas.nativeElement;
         var canvasWidth = htmlCanvasElement.width;
         var canvasHeigth = htmlCanvasElement.height;
-        var iw = this.spot.width;
-        var ih = this.spot.height;
-        var xpos = this.spot.xPos;
-        var ypos = this.spot.yPos;
+        var spotWidth = this.spot.width;
+        var spotHeight = this.spot.height;
+        var spotPosX = this.spot.xPos;
+        var spotPosY = this.spot.yPos;
         this.ctx.save(); /*saves the state of canvas*/
         this.ctx.clearRect(0, 0, canvasWidth, canvasHeigth); /*clear the canvas*/
-        this.ctx.translate(xpos, ypos); /*let's translate*/
-        this.ctx.rotate(Math.PI / 180 * (this.spot.rotate += rotateBy)); /*increment the angle and rotate the image*/
-        this.ctx.translate(-(canvasWidth / 2) + iw / 2, -(canvasHeigth / 2) - ih / 2); /*let's translate*/
-        this.ctx.fillRect(canvasWidth / 2 - iw / 2, canvasHeigth / 2 - ih / 2, iw, ih); /*draw the image ;)*/
+        this.ctx.translate(spotPosX, spotPosY); /*let's translate*/
+        this.ctx.rotate(Math.PI / 180 * (this.spot.rotate += rotateInterval)); /*increment the angle and rotate the image*/
+        this.ctx.translate(-(canvasWidth / 2) + spotWidth / 2, -(canvasHeigth / 2) - spotHeight / 2); /*let's translate*/
+        this.drawSpot(canvasWidth / 2 - spotWidth / 2, canvasHeigth / 2 - spotHeight / 2, spotWidth, spotHeight);
         this.ctx.restore(); /*restore the state of canvas*/
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
     ], CanvasComponent.prototype, "id", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -535,7 +542,7 @@ var GlassesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<!-- <app-video-canvas></app-video-canvas> -->\n"
+module.exports = "\n<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas>\n<app-video-canvas [id]=\"side\"></app-video-canvas>\n\n\n"
 
 /***/ }),
 
@@ -546,7 +553,7 @@ module.exports = "<app-canvas [id]=\"side\" [isActive]=\"isActive\"></app-canvas
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "app-canvas {\n  position: absolute;\n  height: 100%;\n  width: 100%; }\n\napp-video-canvas {\n  height: 100%;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDRztFQUNDLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVyxFQUFBOztBQUVaO0VBQ0MsWUFBWTtFQUNaLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcblx0XHRcdGFwcC1jYW52YXMgeyBcclxuXHRcdFx0XHRwb3NpdGlvbjogYWJzb2x1dGU7IFxyXG5cdFx0XHRcdGhlaWdodDogMTAwJTsgXHJcblx0XHRcdFx0d2lkdGg6IDEwMCU7IFxyXG5cdFx0XHR9IFxyXG5cdFx0XHRhcHAtdmlkZW8tY2FudmFzIHsgXHJcblx0XHRcdFx0aGVpZ2h0OiAxMDAlOyBcclxuXHRcdFx0XHR3aWR0aDogMTAwJTsgXHJcblx0XHRcdH0gXHJcblx0XHRcdFx0IFxyXG4iXX0= */"
+module.exports = "app-canvas {\n  position: absolute;\n  height: 100%;\n  width: 100%; }\n\napp-video-canvas {\n  height: 100%;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQ29tcG9uZW50cy9sZW5zL0M6XFxVc2Vyc1xcbm9zdGVcXENvZGVcXEFuZ3VsYXJcXHNwb3Rvbi9zcmNcXGFwcFxcQ29tcG9uZW50c1xcbGVuc1xcbGVucy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNDLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osV0FBVyxFQUFBOztBQUVaO0VBQ0MsWUFBWTtFQUNaLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL0NvbXBvbmVudHMvbGVucy9sZW5zLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbmFwcC1jYW52YXMgeyBcclxuXHRwb3NpdGlvbjogYWJzb2x1dGU7IFxyXG5cdGhlaWdodDogMTAwJTsgXHJcblx0d2lkdGg6IDEwMCU7IFxyXG59IFxyXG5hcHAtdmlkZW8tY2FudmFzIHsgXHJcblx0aGVpZ2h0OiAxMDAlOyBcclxuXHR3aWR0aDogMTAwJTsgXHJcbn0gXHJcblx0XHRcdFxyXG5cclxuIl19 */"
 
 /***/ }),
 
@@ -658,7 +665,7 @@ var SettingsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id='{{id}}' #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n\n<label for=\"brightnessRange\">brightness</label>\n<input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\" value=100>\n<label for=\"contrastRange\">contrast</label>\n<input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"100\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n\n\n"
+module.exports = "<canvas class=\"canvas\" style=\"width: 16cm; height: 9;\" id=\"{{this.id}}\" #videoCanvas></canvas>\n<app-video (videoStream)=\"loadVideoToCanvas($event)\"></app-video>\n<!-- <button (click)=\"brightness('+')\">+</button>\n<button (click)=\"brightness('-')\">-</button> -->\n\n<div class=\"row\">\n    <label for=\"brightnessRange\">brightness</label>\n    <input id=\"brightnessRange\" type=\"range\" min=\"0\" max=\"200\" #brightness (change)=\"changeBrightness(brightness.value)\"\n        value=100>\n    <label for=\"contrastRange\">contrast</label>\n    <input id=\"contrastRange\" type=\"range\" min=\"0\" max=\"200\" #contrast (change)=\"changeContrast(contrast.value)\" value=100>\n</div>"
 
 /***/ }),
 
@@ -720,7 +727,7 @@ var VideoCanvasComponent = /** @class */ (function () {
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
     ], VideoCanvasComponent.prototype, "id", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('videoCanvas'),
@@ -786,7 +793,6 @@ var VideoComponent = /** @class */ (function () {
         this.initCamera();
     };
     VideoComponent.prototype.initCamera = function () {
-        // const video = document.querySelector('video');
         var _this = this;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
@@ -1055,7 +1061,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div class=\"row center\">\n  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"left\"></app-lens>\n        </div>  \n        <div class=\"col-6\">\n                <app-lens [videoId]=\"right\"></app-lens>\n        </div>\n    </div> -->\n\n<app-glasses></app-glasses>\n<app-settings></app-settings>\n<router-outlet></router-outlet>\n"
+module.exports = "<app-glasses></app-glasses>\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 

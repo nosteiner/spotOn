@@ -11,19 +11,16 @@ export class VideoComponent implements OnInit {
 
   @Input() videoId: string;
   @Output() videoStream = new EventEmitter<HTMLVideoElement>();
-
-
   @ViewChild('videoElement') videoElement: any;
 
   video: any;
+
   ngOnInit() {
     this.video = this.videoElement.nativeElement;
     this.initCamera();
   }
 
   initCamera() {
-
-    // const video = document.querySelector('video');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
