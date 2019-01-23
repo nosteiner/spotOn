@@ -52,6 +52,7 @@ export class CanvasComponent implements OnInit {
 
       this.handleMove(keyPr, htmlCanvasElement);
       this.handleRotate(keyPr);
+      this.glassesService.updateGlasses();
     };
   }
 
@@ -114,7 +115,7 @@ export class CanvasComponent implements OnInit {
     this.ctx.save(); /*saves the state of canvas*/
     this.ctx.clearRect(0, 0, canvasWidth, canvasHeigth); /*clear the canvas*/
     this.ctx.translate(spotPosX, spotPosY); /*let's translate*/
-    this.ctx.rotate(Math.PI / 180 * (this.spot.rotate += rotateInterval)); /*increment the angle and rotate the image*/
+    this.ctx.rotate(Math.PI / 180 * (this.spot.rotation += rotateInterval)); /*increment the angle and rotate the image*/
     this.ctx.translate(-(canvasWidth / 2) + spotWidth / 2, -(canvasHeigth / 2) - spotHeight / 2); /*let's translate*/
     this.drawSpot(canvasWidth / 2 - spotWidth / 2, canvasHeigth / 2 - spotHeight / 2, spotWidth, spotHeight);
     this.ctx.restore(); /*restore the state of canvas*/

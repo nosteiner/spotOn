@@ -2,8 +2,8 @@ import { Settings } from './Settings';
 import { Spot } from './Spot';
 
 export class Lens {
-
-    public isRight: boolean;
+    public _id: String;
+    public isRight: Boolean;
     public settings: Settings;
     public spots: Array<Spot>;
 

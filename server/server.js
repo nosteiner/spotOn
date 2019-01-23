@@ -4,12 +4,11 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config()
-const glasses = require('../server/Glasses');
 
 
 const app = express();
 
-// const Glasses = require('./api/models/Glasses');
+let Glasses = require('./api/models/Glasses');
 
 
 app.use(bodyParser.json());
@@ -17,27 +16,40 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '../dist/spoton')));
 
-app.post('/glasses',
+app.post('/newGlasses',
     (req, res, next) => {
-        const glasses = new Glasses({
-            _id: new mongoose.Types.ObjectId(),
-            lenses: req.body.lenses
-        });
-        glasses.save().then(resulte => {
-            res.status(201).json({
-                createdGlasses: resulte
-            });
+        var glasses = new Glasses(req.body);
+        glasses.save(function (err, doc) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(doc);
+            }
         })
-            .catch(err => {
-                console.log(err)
-                res.status(500).json({ error: err })
-            })
-    });
+    })
 
-app.get('/glasses', (req, res, next) => {
-    console.log(glasses)
-res.send(glasses);
+app.get('/glasses/:id', (req, res, next) => {
+
+    Glasses.findById(req.params.id, function (err, doc) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(doc);
+        }
+    })
+});
+
+app.put(`/updateGlasses/:id`, (req, res, next) => {
+    let query = { '_id': req.params.id };
+
+    Glasses.findOneAndUpdate(query, req.body, function (err, doc) {
+        if (err) { return res.send({ error: err }); 
+     } else {
+         console.log("saved")
+            return res.send("succesfully saved");
+        }
     });
+});
 
 
 app.get('*', (req, res) => {
@@ -47,12 +59,17 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || '8080';
 app.set('port', port);
 
-mongoose.connect('mongodb://noam:' + process.env.MONGO_ATLAS_PW + '@spoton-shard-00-00-i3jdr.mongodb.net:27017,spoton-shard-00-01-i3jdr.mongodb.net:27017,spoton-shard-00-02-i3jdr.mongodb.net:27017/test?ssl=true&replicaSet=SpotOn-shard-0&authSource=admin&retryWrites=true',
-    function () {
-        console.log("DB connected");
-    });
+mongoose.connect('mongodb://noam:' + process.env.MONGO_ATLAS_PW + '@spoton-shard-00-00-i3jdr.mongodb.net:27017,spoton-shard-00-01-i3jdr.mongodb.net:27017,spoton-shard-00-02-i3jdr.mongodb.net:27017/spoton?ssl=true&replicaSet=SpotOn-shard-0&authSource=admin&retryWrites=true');
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+    console.log("DB connected");
+});
 
 const server = http.createServer(app);
 
 server.listen(port, () => console.log(`API running on localhost:${port}`));
+
+
 

@@ -16,7 +16,9 @@ export class GlassesComponent implements OnInit {
   isActiveR = true;
 
   ngOnInit() {
-    console.log(this.glassesService.glasses);
+    // this.glassesService.postGlasses();
+    this.glassesService.getGlasses();
+
   }
 
   @HostListener('document:keypress', ['$event'])

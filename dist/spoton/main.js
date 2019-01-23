@@ -371,6 +371,7 @@ var CanvasComponent = /** @class */ (function () {
             var keyPr = event.keyCode;
             _this.handleMove(keyPr, htmlCanvasElement);
             _this.handleRotate(keyPr);
+            _this.glassesService.updateGlasses();
         };
     };
     CanvasComponent.prototype.handleRotate = function (keyPr) {
@@ -426,7 +427,7 @@ var CanvasComponent = /** @class */ (function () {
         this.ctx.save(); /*saves the state of canvas*/
         this.ctx.clearRect(0, 0, canvasWidth, canvasHeigth); /*clear the canvas*/
         this.ctx.translate(spotPosX, spotPosY); /*let's translate*/
-        this.ctx.rotate(Math.PI / 180 * (this.spot.rotate += rotateInterval)); /*increment the angle and rotate the image*/
+        this.ctx.rotate(Math.PI / 180 * (this.spot.rotation += rotateInterval)); /*increment the angle and rotate the image*/
         this.ctx.translate(-(canvasWidth / 2) + spotWidth / 2, -(canvasHeigth / 2) - spotHeight / 2); /*let's translate*/
         this.drawSpot(canvasWidth / 2 - spotWidth / 2, canvasHeigth / 2 - spotHeight / 2, spotWidth, spotHeight);
         this.ctx.restore(); /*restore the state of canvas*/
@@ -505,7 +506,8 @@ var GlassesComponent = /** @class */ (function () {
         this.isActiveR = true;
     }
     GlassesComponent.prototype.ngOnInit = function () {
-        console.log(this.glassesService.glasses);
+        // this.glassesService.postGlasses();
+        this.glassesService.getGlasses();
     };
     GlassesComponent.prototype.handleKeyboardEvent = function (event) {
         var keyPr = event.keyCode;
@@ -848,6 +850,7 @@ var Glasses = /** @class */ (function () {
         this.addToLensesArray(new _Lens__WEBPACK_IMPORTED_MODULE_0__["Lens"](false));
     }
     Glasses.prototype.setSpotPos = function (spot, spotIndex, isRight) {
+        console.log(spot, spotIndex, isRight);
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
         this.lenses[index].spots[spotIndex] = spot;
     };
@@ -940,10 +943,10 @@ var Spot = /** @class */ (function () {
         this.yPos = y;
         this.width = 4;
         this.height = 2;
-        this.rotate = 0;
+        this.rotation = 0;
     }
     Spot.prototype.rotateBy = function (value) {
-        this.rotate += value;
+        this.rotation += value;
     };
     Spot.prototype.resize = function (newWidth, newHeight) {
         this.width = newWidth;
@@ -976,8 +979,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Models/Glasses */ "./src/app/Models/Glasses.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-
 
 
 
@@ -985,28 +986,32 @@ __webpack_require__.r(__webpack_exports__);
 var GlassesService = /** @class */ (function () {
     function GlassesService(http) {
         this.http = http;
-        this.glassesSbject = new rxjs__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
         this.glasses = new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]();
-        // this.glassesObservable = this.glassesSbject.asObservable();
-        // this.getGlasses();
     }
     GlassesService.prototype.updateGlasses = function () {
-        var _this = this;
-        this.http.put("/updateGlasses", this.glasses).subscribe(function () {
-            _this.getGlasses();
+        this.http.put("/updateGlasses/5c48517c4533aa48a09504d7", this.glasses).subscribe(function (data) {
         });
     };
     GlassesService.prototype.getGlasses = function () {
-        // this.http.get<Glasses>('/glasses').subscribe((data) => {
-        //   this.glasses = data;
-        //   console.log( typeof this.glasses);
-        //   this.glassesSbject.next( this.glasses = data);
-        // });
-        return this.glasses;
+        var _this = this;
+        this.http.get('/glasses/5c48517c4533aa48a09504d7').subscribe(function (data) {
+            _this.glasses = _this.deepCopy(data, new _Models_Glasses__WEBPACK_IMPORTED_MODULE_2__["Glasses"]());
+        });
     };
     GlassesService.prototype.getSpot = function (isRight, spotIndex) {
         console.log(isRight);
         return this.glasses.getSpot(isRight, spotIndex);
+    };
+    GlassesService.prototype.deepCopy = function (newObj, oldObj) {
+        for (var key in newObj) {
+            if (typeof newObj[key] === 'object') {
+                oldObj[key] = this.deepCopy(newObj[key], oldObj[key]);
+            }
+            else {
+                oldObj[key] = newObj[key];
+            }
+        }
+        return oldObj;
     };
     GlassesService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
