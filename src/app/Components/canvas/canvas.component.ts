@@ -27,7 +27,7 @@ export class CanvasComponent implements OnInit {
       this.spot = this.glassesService.getSpot(this.id, 0);
       this.initCanvas();
     });
-    this.glassesService.getGlasses(this.glassesService.id);
+    this.glassesService.getGlasses(this.glassesService.glasses._id);
   }
 
 
@@ -53,7 +53,7 @@ handleKeyDown() {
     this.handleMove(keyPr, htmlCanvasElement);
     this.handleRotate(keyPr);
     this.glassesService.glasses.setSpot(this.spot, 0, this.id); /*hard coded 0 - as index of spot in the spots array*/
-    this.glassesService.updateGlasses(this.glassesService.id);
+    this.glassesService.updateGlasses(this.glassesService.glasses._id);
   };
 }
 

@@ -10,7 +10,7 @@ export class Glasses {
         this.addToLensesArray(new Lens(true));
         this.addToLensesArray(new Lens(false));
     }
-    private _id: String;
+    public _id: String;
     public lenses: Array<Lens>;
 
     setSpot(spot: Spot, spotIndex, isRight) {
