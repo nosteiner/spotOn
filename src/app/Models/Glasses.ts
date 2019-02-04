@@ -1,6 +1,5 @@
 import { Lens } from './Lens';
 import { Spot } from './Spot';
-import { Settings } from 'http2';
 
 export class Glasses {
 
@@ -18,9 +17,9 @@ export class Glasses {
         this.lenses[index].spots[spotIndex] = spot;
     }
 
-    setSettings(settings, isRight) {
+    setSettings(contrast, brightness, isRight) {
         const index = this.lenses.findIndex(lens => lens.isRight === isRight);
-        this.lenses[index].settings = settings;
+        this.lenses[index].settings.set( brightness, contrast);
     }
 
     getSettings(isRight) {

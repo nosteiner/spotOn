@@ -591,9 +591,13 @@ var LensComponent = /** @class */ (function () {
     };
     LensComponent.prototype.changeContrast = function (value) {
         this.contrastValue = Number(value);
+        this.glassesService.glasses.setSettings(this.brightnessValue, this.contrastValue, this.side);
+        this.glassesService.updateGlasses(this.glassesService.id);
     };
     LensComponent.prototype.changeBrightness = function (value) {
         this.brightnessValue = Number(value);
+        this.glassesService.glasses.setSettings(this.brightnessValue, this.contrastValue, this.side);
+        this.glassesService.updateGlasses(this.glassesService.id);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -846,9 +850,9 @@ var Glasses = /** @class */ (function () {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
         this.lenses[index].spots[spotIndex] = spot;
     };
-    Glasses.prototype.setSettings = function (settings, isRight) {
+    Glasses.prototype.setSettings = function (contrast, brightness, isRight) {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });
-        this.lenses[index].settings = settings;
+        this.lenses[index].settings.set(brightness, contrast);
     };
     Glasses.prototype.getSettings = function (isRight) {
         var index = this.lenses.findIndex(function (lens) { return lens.isRight === isRight; });

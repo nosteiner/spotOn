@@ -26,9 +26,13 @@ export class LensComponent implements OnInit {
 
   changeContrast(value) {
     this.contrastValue = Number(value);
+    this.glassesService.glasses.setSettings(this.brightnessValue, this.contrastValue, this.side);
+    this.glassesService.updateGlasses(this.glassesService.id);
   }
 
   changeBrightness(value) {
     this.brightnessValue = Number(value);
+    this.glassesService.glasses.setSettings(this.brightnessValue, this.contrastValue, this.side);
+    this.glassesService.updateGlasses(this.glassesService.id);
   }
 }

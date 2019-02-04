@@ -26,7 +26,7 @@ export class VideoCanvasComponent implements OnInit, OnChanges {
       this.settings = this.glassesService.getSettings(this.id);
       this.initCanvas();
     });
-    this.glassesService.getGlasses(this.glassesService.glasses._id);
+    this.glassesService.getGlasses(this.glassesService.id);
   }
 
   ngOnChanges(changes: SimpleChanges) {
